@@ -1,0 +1,15 @@
+#gameboard td
+{
+	border:1px solid black;
+	display:block;
+	width:50px;
+	height:50px;
+	text-align:center;
+	color: gray;
+}
+
+#gameboard td:hover
+{
+	background-color:red;
+	cursor: crosshair;
+}
