@@ -33,7 +33,7 @@
 				var x = axis[0]; //Is a string
 				var y = parseInt(axis[1]); //Ís a number
 
-				$.post("http://localhost:3000/game/1/hit",  {x: x, y: y})
+				$.post("http://localhost:3000/games/1/shots",  {x: x, y: y})
 					.done(function(data){
 						console.log(data);
 					});

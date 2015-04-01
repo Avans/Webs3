@@ -16,20 +16,21 @@ var gameSchema = new Schema({
 
 var gameboardSchema = new Schema({
   _id: Number,
-  hits: {x: String, y: Number},
+  shots: [{x: String, y: Number}],
   ships: [{
   	isVertical: Boolean, //1 = vertical, 0 = horizontal 
   	shipId: { type: Number, ref: 'Ship' },
   	length: Number,
-	 startCell: {x: String, y: Number}
+	  startCell: {x: String, y: Number},
+    hits: [{x: String, y: Number}]
   }],
 });
 
-gameboardSchema.methods.isShipHit = function(hit) {
-	//Check every ship on the board
+gameboardSchema.methods.isShipHit = function(shot) {
 
-	var result = 'SPLASH';
-
+	  var result = 'SPLASH';
+    
+    //Check every ship on the board
   	this.ships.forEach(function(ship){
 
   		var x = ship.startCell.x;
@@ -38,7 +39,8 @@ gameboardSchema.methods.isShipHit = function(hit) {
   		//check all of the cells that the ship is on
   		for(var index =0; index < ship.length; index++){
 
-  			if(x == hit.x & y == hit.y){
+  			if(x == shot.x & y == shot.y){
+          ship.hits.push(shot);
   				result = 'BOOM';
   			}
 

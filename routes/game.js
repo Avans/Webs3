@@ -1,8 +1,20 @@
 var express = require('express');
 var mongoose = require('mongoose');
+var _ = require('underscore');
+
 var router = express.Router();
 
 var Gameboard = mongoose.model('Gameboard');
+
+function validateHit(hit)
+{
+	if(!Object.keys(hit).length) { return "No data in Ajax request"; }
+	if(!hit.x) { return "No key 'x' found on JSON object";}
+	if(!hit.y) { return "No key 'y' found on JSON object";}
+	if(isNaN(hit.y)) { return "Key 'y' could not be converted to a number" ;}
+	return undefined;
+}
+
 
 /** --------  ALl the routes to  /game --------------**/
 /**	All the routes for the gameboard **/
@@ -21,7 +33,7 @@ router.route('/')
 		 	});
 	})
 
-	/** -------------    POST /game ------------------**/
+	/** -------------    POST /games ------------------**/
 	/** Add a new empty game board to the collection **/
 	.post(function(req, res, next) {
 
@@ -34,29 +46,53 @@ router.route('/')
 		});
 	});
 
-/** --------  ALl the routes to  /game/:id/hit --------------**/
-/**	All the routes for the gameboard it's hits **/
-router.route('/:id/hit')
+/** 
+--------  ALl the routes to  /games/:id/shots --------------
+All the routes for the gameboard it's hits
+Return values: Error, SPLASH, BOOM and fail
+Error: Wrong URL or JSON
+SPLASH: shot added to the board, but no ship hit
+BOOM: shot added to the board and to the hit of the ship 
+FAIL: trying to add a shot that already excists
+**/
+router.route('/:id/shots')
 	
 	.post(function(req, res, next){
 
-		var hit = req.body;
+		var pShot = req.body;
 
-		Gameboard.findByIdAndUpdate(
-			req.params.id,
-			{$push: {hits: hit}},
-			{safe: true, upsert: true},
-			function(err, model) {
+		//Validate the parameter Shot
+		var error = validateHit(pShot);
+		if(error){return res.send(error + ";JSON: " + pShot);}
 
-				console.log(hit);
+		//Make sure pShot.x is a number
+		pShot.y = parseInt(pShot.y);
 
-			 	if(err){ res.send('error'); }
-			   	else res.send(model.isShipHit(hit));
+		Gameboard
+		.findById(req.params.id, function(err, gameboard){
+
+			if(!gameboard) { res.send("No gameboard found with id " + req.params.id)} 
+			else
+			{
+				var shotFound = _.findWhere(gameboard.shots, pShot);
+				console.log(pShot);
+
+				//if shots does NOT contain a shot that looks like pShot
+				if(!shotFound)
+				{
+					gameboard.shots.push(pShot); 
+					var response = gameboard.isShipHit(pShot)
+					gameboard.save(function(err, gameboard){
+						console.log(gameboard);
+						res.send(response);
+					})
+				}
+				else{res.send("FAIL");}
 			}
-		);
+		});
 	});
 
-/** --------  ALl the routes to  /game/:id:/ship --------------**/
+/** --------  ALl the routes to  /games/:id:/ships --------------**/
 /**	All the routes for the gameboard it's ships **/
 // router.route('/:id/ship')
 
