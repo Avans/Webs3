@@ -3,18 +3,8 @@ var mongoose = require('mongoose');
 var _ = require('underscore');
 
 var router = express.Router();
-
+var Game = mongoose.model('Game');
 var Gameboard = mongoose.model('Gameboard');
-
-function validateHit(hit)
-{
-	if(!Object.keys(hit).length) { return "No data in Ajax request"; }
-	if(!hit.x) { return "No key 'x' found on JSON object";}
-	if(!hit.y) { return "No key 'y' found on JSON object";}
-	if(isNaN(hit.y)) { return "Key 'y' could not be converted to a number" ;}
-	return undefined;
-}
-
 
 /** --------  ALl the routes to  /game --------------**/
 /**	All the routes for the gameboard **/
@@ -24,93 +14,85 @@ router.route('/')
 	/** All the gameboards that currently are active **/
 	.get(function(req, res, next) {
 		
-		Gameboard
-		  	.find()
-		 	.exec(function(err, result){
-		 		if(err) { res.send("error");}
+		Game
+			.find({player2: undefined})
+			.exec(function(err, games){
 
-		 		res.json(result);
-		 	});
-	})
+				//Select first game
+				var game = games[0];
+				//Todo: Replace 'currentUser' with username of current username
+				var currentUser =  "currentUser";
 
-	/** -------------    POST /games ------------------**/
-	/** Add a new empty game board to the collection **/
+				if(game) //If game found, add current player and return game
+				{
+
+					game.player2 = currentUser;
+					game.status = Game.schema.status.setup;
+					game.save(function(err, done){
+						res.send(game);
+					});
+				}
+				
+				else //If no available game found, make a new one
+				{
+
+					newGame = new Game({player1: currentUser});
+					newGame.status = Game.schema.status.que;
+					newGame.save(function(err, newGame){
+						res.send(newGame);
+					});
+				}
+			});
+	});
+
+router.route('/:id/gameboards')
+
 	.post(function(req, res, next) {
 
 		var gameboard = new Gameboard(req.body);
 
-		gameboard.save(function(err, data){
-		if(err) { res.send("error");}
+		Game
+			.findById(req.params.id)
+			.exec(function(err, game){
 
-			res.send("success");
-		});
-	});
-
-/** 
---------  ALl the routes to  /games/:id/shots --------------
-All the routes for the gameboard it's hits
-Return values: Error, SPLASH, BOOM and fail
-Error: Wrong URL or JSON
-SPLASH: shot added to the board, but no ship hit
-BOOM: shot added to the board and to the hit of the ship 
-FAIL: trying to add a shot that already excists
-**/
-router.route('/:id/shots')
-	
-	.post(function(req, res, next){
-
-		var pShot = req.body;
-
-		//Validate the parameter Shot
-		var error = validateHit(pShot);
-		if(error){return res.send(error + ";JSON: " + pShot);}
-
-		//Make sure pShot.x is a number
-		pShot.y = parseInt(pShot.y);
-
-		Gameboard
-		.findById(req.params.id, function(err, gameboard){
-
-			if(!gameboard) { res.send("No gameboard found with id " + req.params.id)} 
-			else
-			{
-				var shotFound = _.findWhere(gameboard.shots, pShot);
-				console.log(pShot);
-
-				//if shots does NOT contain a shot that looks like pShot
-				if(!shotFound)
+				if(game.status === Game.schema.status.setup)
 				{
-					gameboard.shots.push(pShot); 
-					var response = gameboard.isShipHit(pShot)
 					gameboard.save(function(err, gameboard){
-						console.log(gameboard);
-						res.send(response);
-					})
+						//check for errors
+						if(err){res.json(err);}
+						else{
+
+							//if board 1 is not yet set
+							if(!game.board1)
+							{
+								//TODO: bord moet gekozen worden o.b.v. currentUser
+								game.board1 = gameboard._id;
+								game.save(function(err, game){
+	
+									if(err){res.json(err);}
+									else {res.send("success");}
+								});
+							}
+							else
+							{
+								//TODO: bord moet gekozen worden o.b.v. currentUser
+								game.board2 = gameboard._id;
+								game.status = Game.schema.status.started;
+
+								game.save(function(err, game){
+									if(err){res.json(err);}
+									else{res.send("success");}
+								});
+							}
+						}
+					});
 				}
-				else{res.send("FAIL");}
-			}
-		});
+				else
+				{
+					res.send("Het is niet mogelijk om een gameboard te submitten naar een game met de status " + game.status);
+				}
+
+			});
 	});
-
-/** --------  ALl the routes to  /games/:id:/ships --------------**/
-/**	All the routes for the gameboard it's ships **/
-// router.route('/:id/ship')
-
-// 	.post(function(req, res, next){
-
-// 		var ship = req.body;
-
-// 		Gameboard.findByIdAndUpdate(
-// 			req.params.id,
-// 			{$push: {ships: ship}},
-// 			{safe: true, upsert: true},
-// 			function(err, model) {
-// 			 	if(err){ res.send('error'); }
-// 			   	else{res.send("success");}
-// 			}
-// 		);
-// 	});
-
-
 
 module.exports = router;

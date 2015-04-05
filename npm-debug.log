@@ -1,29 +1,90 @@
 0 info it worked if it ends with ok
 1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
 1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'start' ]
+1 verbose cli   'install',
+1 verbose cli   'node-jwt-simple' ]
 2 info using npm@1.4.28
 3 info using node@v0.10.36
 4 verbose node symlink C:\Program Files\nodejs\\node.exe
-5 verbose run-script [ 'prestart', 'start', 'poststart' ]
-6 info prestart ZeeSlag@0.0.0
-7 info start ZeeSlag@0.0.0
-8 verbose unsafe-perm in lifecycle true
-9 info ZeeSlag@0.0.0 Failed to exec start script
-10 error ZeeSlag@0.0.0 start: `node ./bin/www`
-10 error Exit status 8
-11 error Failed at the ZeeSlag@0.0.0 start script.
-11 error This is most likely a problem with the ZeeSlag package,
-11 error not with npm itself.
-11 error Tell the author that this fails on your system:
-11 error     node ./bin/www
-11 error You can get their info via:
-11 error     npm owner ls ZeeSlag
-11 error There is likely additional logging output above.
-12 error System Windows_NT 6.2.9200
-13 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "start"
-14 error cwd C:\node\ZeeSlag
-15 error node -v v0.10.36
-16 error npm -v 1.4.28
-17 error code ELIFECYCLE
-18 verbose exit [ 1, true ]
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'node-jwt-simple', null ]
+7 verbose cache add name=undefined spec="node-jwt-simple" args=["node-jwt-simple",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'node-jwt-simple',
+8 verbose parsed url   path: 'node-jwt-simple',
+8 verbose parsed url   href: 'node-jwt-simple' }
+9 silly lockFile eb5b9c23-node-jwt-simple node-jwt-simple
+10 verbose lock node-jwt-simple C:\Users\ssmulder\AppData\Roaming\npm-cache\eb5b9c23-node-jwt-simple.lock
+11 silly lockFile eb5b9c23-node-jwt-simple node-jwt-simple
+12 silly lockFile eb5b9c23-node-jwt-simple node-jwt-simple
+13 verbose addNamed [ 'node-jwt-simple', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile 9cc1bad9-node-jwt-simple node-jwt-simple@
+16 verbose lock node-jwt-simple@ C:\Users\ssmulder\AppData\Roaming\npm-cache\9cc1bad9-node-jwt-simple.lock
+17 silly addNameRange { name: 'node-jwt-simple', range: '*', hasData: false }
+18 verbose request where is /node-jwt-simple
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 91200dd5b495c9b1
+21 verbose url raw /node-jwt-simple
+22 verbose url resolving [ 'https://registry.npmjs.org/', './node-jwt-simple' ]
+23 verbose url resolved https://registry.npmjs.org/node-jwt-simple
+24 verbose request where is https://registry.npmjs.org/node-jwt-simple
+25 info trying registry request attempt 1 at 09:18:21
+26 http GET https://registry.npmjs.org/node-jwt-simple
+27 http 404 https://registry.npmjs.org/node-jwt-simple
+28 verbose headers { date: 'Fri, 03 Apr 2015 07:18:22 GMT',
+28 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+28 verbose headers   'content-type': 'application/json',
+28 verbose headers   'cache-control': 'max-age=0',
+28 verbose headers   'content-length': '51',
+28 verbose headers   'accept-ranges': 'bytes',
+28 verbose headers   via: '1.1 varnish',
+28 verbose headers   age: '0',
+28 verbose headers   'x-served-by': 'cache-ams4139-AMS',
+28 verbose headers   'x-cache': 'MISS',
+28 verbose headers   'x-cache-hits': '0',
+28 verbose headers   'x-timer': 'S1428045502.279101,VS0,VE657',
+28 verbose headers   'keep-alive': 'timeout=10, max=50',
+28 verbose headers   connection: 'Keep-Alive' }
+29 silly registry.get cb [ 404,
+29 silly registry.get   { date: 'Fri, 03 Apr 2015 07:18:22 GMT',
+29 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+29 silly registry.get     'content-type': 'application/json',
+29 silly registry.get     'cache-control': 'max-age=0',
+29 silly registry.get     'content-length': '51',
+29 silly registry.get     'accept-ranges': 'bytes',
+29 silly registry.get     via: '1.1 varnish',
+29 silly registry.get     age: '0',
+29 silly registry.get     'x-served-by': 'cache-ams4139-AMS',
+29 silly registry.get     'x-cache': 'MISS',
+29 silly registry.get     'x-cache-hits': '0',
+29 silly registry.get     'x-timer': 'S1428045502.279101,VS0,VE657',
+29 silly registry.get     'keep-alive': 'timeout=10, max=50',
+29 silly registry.get     connection: 'Keep-Alive' } ]
+30 silly lockFile 9cc1bad9-node-jwt-simple node-jwt-simple@
+31 silly lockFile 9cc1bad9-node-jwt-simple node-jwt-simple@
+32 error 404 404 Not Found: node-jwt-simple
+32 error 404
+32 error 404 'node-jwt-simple' is not in the npm registry.
+32 error 404 You should bug the author to publish it
+32 error 404 It was specified as a dependency of 'ZeeSlag'
+32 error 404
+32 error 404 Maybe try 'npm search jwt simple'
+32 error 404
+32 error 404 Note that you can also install from a
+32 error 404 tarball, folder, or http url, or git url.
+33 error System Windows_NT 6.2.9200
+34 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "node-jwt-simple"
+35 error cwd C:\node\ZeeSlag
+36 error node -v v0.10.36
+37 error npm -v 1.4.28
+38 error code E404
+39 verbose exit [ 1, true ]

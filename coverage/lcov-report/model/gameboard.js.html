@@ -18,7 +18,7 @@
     <h1>Code coverage report for <span class="entity">model\gameboard.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">100% <small>(21 / 21)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">100% <small>(24 / 24)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
         Branches: <span class="metric">100% <small>(4 / 4)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -27,7 +27,7 @@
         Functions: <span class="metric">100% <small>(2 / 2)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">100% <small>(21 / 21)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">100% <small>(24 / 24)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -99,19 +99,14 @@
 62
 63
 64
-65</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+65
+66
+67</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -120,12 +115,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,76 +167,78 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span></td><td class="text"><pre class="prettyprint lang-js">var mongoose = require('mongoose');
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+autoIncrement = require('mongoose-auto-increment');
 &nbsp;
-var shipSchema = new Schema({
-	_id: Number, 
-	name: String,
-	length: Number
-});
+var autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(mongoose.connection);
 &nbsp;
-var gameSchema = new Schema({
-  playe1: String, 
-  player2: String, 
-  board1: {  type: Number, ref: 'Gameboard' },
-  board2: {  type: Number, ref: 'Gameboard' }
-});
+  //autoIncrement.initialize(connection); 
 &nbsp;
-var gameboardSchema = new Schema({
-  _id: Number,
-  shots: [{x: String, y: Number}],
-  ships: [{
-  	isVertical: Boolean, //1 = vertical, 0 = horizontal 
-  	shipId: { type: Number, ref: 'Ship' },
-  	length: Number,
-	  startCell: {x: String, y: Number},
-    hits: [{x: String, y: Number}]
-  }],
-});
+  var shipSchema = new Schema({
+    name: String,
+    length: Number
+  });
 &nbsp;
-gameboardSchema.methods.isShipHit = function(shot) {
+  shipSchema.plugin(autoIncrement.plugin, 'Ship');
 &nbsp;
-	  var result = 'SPLASH';
-    
-    //Check every ship on the board
-  	this.ships.forEach(function(ship){
 &nbsp;
-  		var x = ship.startCell.x;
-  		var y = ship.startCell.y;
+  var gameboardSchema = new Schema({
+    shots: [{x: String, y: Number}],
+    ships: [{
+      isVertical: Boolean, //1 = vertical, 0 = horizontal 
+      shipId: { type: Number, ref: 'Ship' },
+      length: Number,
+      startCell: {x: String, y: Number},
+      hits: [{x: String, y: Number}]
+    }],
+  });
 &nbsp;
-  		//check all of the cells that the ship is on
-  		for(var index =0; index &lt; ship.length; index++){
+  gameboardSchema.plugin(autoIncrement.plugin, 'Gameboard');
 &nbsp;
-  			if(x == shot.x &amp; y == shot.y){
-          ship.hits.push(shot);
-  				result = 'BOOM';
-  			}
+  gameboardSchema.methods.isShipHit = function(shot) {
 &nbsp;
-  			//Increase X or Y depending on Orientation
-  			if(ship.isVertical) //If vertical, increase Y 
-  			{ 
-  				y++;
-  			}
-  			else //If horizontal, increase X
-  			{
-  				x = String.fromCharCode(x.charCodeAt(0) + 1);
-  			}
-  		}
-  	});
+      var result = 'SPLASH';
+      
+      //Check every ship on the board
+      this.ships.forEach(function(ship){
 &nbsp;
-  	//If we reach this statement, the ship is not hit. 
-  	return result;
-}
+        var x = ship.startCell.x;
+        var y = ship.startCell.y;
 &nbsp;
-mongoose.model('Game', gameSchema);
-mongoose.model('Ship', shipSchema);
-mongoose.model('Gameboard', gameboardSchema);</pre></td></tr>
+        //check all of the cells that the ship is on
+        for(var index =0; index &lt; ship.length; index++){
+&nbsp;
+          if(x == shot.x &amp; y == shot.y){
+            ship.hits.push(shot);
+            result = 'BOOM';
+          }
+&nbsp;
+          //Increase X or Y depending on Orientation
+          if(ship.isVertical) //If vertical, increase Y 
+          { 
+            y++;
+          }
+          else //If horizontal, increase X
+          {
+            x = String.fromCharCode(x.charCodeAt(0) + 1);
+          }
+        }
+      });
+&nbsp;
+      //If we reach this statement, the ship is not hit. 
+      return result;
+  }
+&nbsp;
+  mongoose.model('Ship', shipSchema);
+  mongoose.model('Gameboard', gameboardSchema);
+&nbsp;</pre></td></tr>
 </table></pre>
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Apr 01 2015 15:14:51 GMT+0200 (W. Europe Daylight Time)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 02 2015 09:14:19 GMT+0200 (W. Europe Daylight Time)</div>
 </div>
 
 <script src="../prettify.js"></script>

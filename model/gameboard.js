@@ -1,65 +1,66 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+autoIncrement = require('mongoose-auto-increment');
 
-var shipSchema = new Schema({
-	_id: Number, 
-	name: String,
-	length: Number
-});
+var autoIncrement = require('mongoose-auto-increment');
+autoIncrement.initialize(mongoose.connection);
 
-var gameSchema = new Schema({
-  playe1: String, 
-  player2: String, 
-  board1: {  type: Number, ref: 'Gameboard' },
-  board2: {  type: Number, ref: 'Gameboard' }
-});
+  //autoIncrement.initialize(connection); 
 
-var gameboardSchema = new Schema({
-  _id: Number,
-  shots: [{x: String, y: Number}],
-  ships: [{
-  	isVertical: Boolean, //1 = vertical, 0 = horizontal 
-  	shipId: { type: Number, ref: 'Ship' },
-  	length: Number,
-	  startCell: {x: String, y: Number},
-    hits: [{x: String, y: Number}]
-  }],
-});
+  var shipSchema = new Schema({
+    name: String,
+    length: Number
+  });
 
-gameboardSchema.methods.isShipHit = function(shot) {
+  shipSchema.plugin(autoIncrement.plugin, 'Ship');
 
-	  var result = 'SPLASH';
-    
-    //Check every ship on the board
-  	this.ships.forEach(function(ship){
 
-  		var x = ship.startCell.x;
-  		var y = ship.startCell.y;
+  var gameboardSchema = new Schema({
+    shots: [{x: String, y: Number}],
+    ships: [{
+      isVertical: Boolean, //1 = vertical, 0 = horizontal 
+      shipId: { type: Number, ref: 'Ship' },
+      length: Number,
+      startCell: {x: String, y: Number},
+      hits: [{x: String, y: Number}]
+    }],
+  });
 
-  		//check all of the cells that the ship is on
-  		for(var index =0; index < ship.length; index++){
+  gameboardSchema.plugin(autoIncrement.plugin, 'Gameboard');
 
-  			if(x == shot.x & y == shot.y){
-          ship.hits.push(shot);
-  				result = 'BOOM';
-  			}
+  gameboardSchema.methods.isShipHit = function(shot) {
 
-  			//Increase X or Y depending on Orientation
-  			if(ship.isVertical) //If vertical, increase Y 
-  			{ 
-  				y++;
-  			}
-  			else //If horizontal, increase X
-  			{
-  				x = String.fromCharCode(x.charCodeAt(0) + 1);
-  			}
-  		}
-  	});
+      var result = 'SPLASH';
+      
+      //Check every ship on the board
+      this.ships.forEach(function(ship){
 
-  	//If we reach this statement, the ship is not hit. 
-  	return result;
-}
+        var x = ship.startCell.x;
+        var y = ship.startCell.y;
 
-mongoose.model('Game', gameSchema);
-mongoose.model('Ship', shipSchema);
-mongoose.model('Gameboard', gameboardSchema);
+        //check all of the cells that the ship is on
+        for(var index =0; index < ship.length; index++){
+
+          if(x == shot.x & y == shot.y){
+            ship.hits.push(shot);
+            result = 'BOOM';
+          }
+
+          //Increase X or Y depending on Orientation
+          if(ship.isVertical) //If vertical, increase Y 
+          { 
+            y++;
+          }
+          else //If horizontal, increase X
+          {
+            x = String.fromCharCode(x.charCodeAt(0) + 1);
+          }
+        }
+      });
+
+      //If we reach this statement, the ship is not hit. 
+      return result;
+  }
+
+  mongoose.model('Ship', shipSchema);
+  mongoose.model('Gameboard', gameboardSchema);

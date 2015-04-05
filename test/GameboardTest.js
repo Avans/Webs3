@@ -1,15 +1,18 @@
+//Test setup
 var request = require('supertest');
 var expect = require('chai').expect;
 var should = require('chai').should();
 
-
+//Database setup
 var mongoose = require('mongoose');
-var models = require('../model/gameboard');
+require('../model/gameboard');
+
+//Model setup
 var Gameboard = mongoose.model('Gameboard');
 var Ship = mongoose.model('Ship');
 var gameboard; 
 
-describe('The Gameboard Model test has the method ', function(){
+describe('Test that depend on model Gameboard', function(){
 
 	before('hook: before test set', function(done){
 		
@@ -28,7 +31,6 @@ describe('The Gameboard Model test has the method ', function(){
 		
 		var result = gameboard.isShipHit({x: 'a', y: 0});
 
-		console.log(result);
 		expect(result).to.equal('BOOM');
 
 		done();
@@ -74,4 +76,5 @@ describe('The Gameboard Model test has the method ', function(){
 
 		done();
 	});
+
 });

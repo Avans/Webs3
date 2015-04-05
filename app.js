@@ -3,34 +3,47 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var passport = require('passport');
+var cookieSession = require('cookie-session');
+var cors = require('cors');
 
 //Require models and routes and configs
-var gameboard = require('./model/gameboard');
-var game = require('./routes/game');
-var dbConfig = require('./config/database');
+require('./model/gameboard');
+require('./model/game');
+require('./model/user');
 
+var dbConfig = require('./config/database');
+var passConfig = require('./config/passport')(passport);
 mongoose.connect(dbConfig.url);
 
 var app = express();
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
+app.use(cors());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser()); // read cookies (needed for auth)
 app.use(express.static(path.join(__dirname, 'public')));
 
+//passport
+app.use(cookieSession({   keys: ['key1', 'key2'] }));
+app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+//Route all the routes!
+var gameboard = require('./routes/gameboard');
+var game = require('./routes/game');
+var index = require("./routes/index")(app, passport);
 app.use('/games', game);
+app.use('/gameboards', gameboard);
+app.use('/', index);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

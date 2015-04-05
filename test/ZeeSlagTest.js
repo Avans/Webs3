@@ -1,26 +1,46 @@
-var request = require('supertest');
-var expect = require('chai').expect;
-var should = require('chai').should();
-var async = require('async');
+//require modules
 var bodyParser = require('body-parser');
+var async = require('async');
+var passport = require('passport');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
 
+//Setup app for testing
 var dbConfig = require('../config/database')
 var mongoose = require('mongoose');
-mongoose.connect(dbConfig.testUrl);
+var connection = mongoose.connect(dbConfig.testUrl);
 
-var models = require('../model/gameboard');
+//Require lcoal thingys
+require('../model/gameboard');
+require('../model/game');
+var gameboard = require('../routes/gameboard');
+var game = require('../routes/game');
+
+//Require Gameboard
 var Gameboard = mongoose.model('Gameboard');
+var Game = mongoose.model('Game');
 
+//init app
 var app = require('express')();
 app.use(bodyParser.json());
-var game = require('../routes/game');
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
+//It's passport time!
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured p
+
+//Route all the routes
+app.use('/gameboards', gameboard);
 app.use('/games', game);
 
 mongoose.connection.on('error', function(err){
     console.log(err);
 });
 
-describe('Zeeslag /games routes', function(){
+//include te sub tests
+describe('Test that depend on routes', function(){
 	
 	before('Hook: before test set', function(done) {
 
@@ -52,186 +72,15 @@ describe('Zeeslag /games routes', function(){
 		], function(){done();} );
   	});
 
-	describe('The resource "/games" CRUD function ', function(){
 
-		it('GET should return a resource', function(done){
+	//All the test for .Game
+	require('./ZeeSlagTest.Gameboard')(app, Gameboard);
 
-			request(app)
-				.get('/games')
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
+	//All the test for .Game
+	require('./ZeeSlagTest.Shot')(app, Gameboard);
 
-					res.body.should.have.length(2);
-					done(null, res);
-				});
-		});
-
-		it('POST should return success', function(done){
-
-			var gameboard = {_id: 3};
-
-			request(app)
-				.post('/games')
-       			.send(gameboard)
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("success");
-
-					Gameboard.find().exec(function(err, result){
-						result.should.have.length(3);
-						done(null, res);
-					});
-				});
-		});
-	});
-
-	describe('The "/games/:id/shots" CRUD function ', function(){
-
-		it('POST should return BOOM and add a hit', function(done){
-
-			request(app)
-				.post('/games/1/shots')
-				.send({x: 'a', y: 1})
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("BOOM");
-
-					Gameboard.find(1).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
-						done(null, res);
-					});
-
-					done(null, res);
-				});
-		});
-
-		it('POST should return SPLASH and add a shot', function(done){
-
-			request(app)
-				.post('/games/1/shots')
-				.send({x: 'c', y: 3})
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("SPLASH");
-
-					Gameboard.find(1).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
-						done(null, res);
-					});
-
-					done(null, res);
-				});
-		});
-
-
-		it('POST should return FAIL and NOT add a shot', function(done){
-
-			request(app)
-				.post('/games/2/shots')
-				.send({x: 'g', y: 6})
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("FAIL");
-
-					Gameboard.find(1).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
-						done(null, res);
-					});
-
-					done(null, res);
-				});
-		});
-
-		it('POST with wrong ID should return ERROR', function(done){
-
-			request(app)
-				.post('/games/18/shots')
-				.send({x: 'g', y: 6})
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("No gameboard found with id 18");
-					done(null, res);
-				});
-		});
-
-		it('POST without data should return ERROR', function(done){
-			var data = {};
-
-			request(app)
-				.post('/games/2/shots')
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("No data in Ajax request;JSON: " + data);
-					done(null, res);
-				});
-		});
-
-
-		it('POST without Y should return ERROR', function(done){
-
-			var data = {x: 'a'};
-			request(app)
-				.post('/games/2/shots')
-				.send(data)
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("No key 'y' found on JSON object;JSON: " + data);
-					done(null, res);
-				});
-		});
-
-
-		it('POST without X should return ERROR', function(done){
-			var data = {y: '2'};
-			request(app)
-				.post('/games/2/shots')
-				.send(data)
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("No key 'x' found on JSON object;JSON: " + data);
-					done(null, res);
-				});
-		});
-
-
-		it('POST with unparsable X should return ERROR', function(done){
-
-			var data = { x: 'a', y : 'c'};
-
-			request(app)
-				.post('/games/2/shots')
-				.send(data)
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.text).to.equal("Key 'y' could not be converted to a number;JSON: " + data);
-					done(null, res);
-				});
-		});
-	});
-
-	describe('The "/games/:id/ships" CRUD function ', function(){
-		
-	});
-
+	//All the test for .Game
+	require('./ZeeSlagTest.Game')(app, Game);
 
 	after('Hook: after test set', function() {
 		Gameboard.collection.remove();
