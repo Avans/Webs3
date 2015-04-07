@@ -1,11 +1,26 @@
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var jwt = require('jwt-simple');
 
 // load up the user model
 var User = require('../model/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
+
+    //Bearer token strategy
+    passport.use('bearer', new BearerStrategy(
+      function(token, done) {
+
+        console.log('passport.js: the token is ' + token);
+        User.findOne({ token: token }, function (err, user) {
+          if (err) { return done(err); }
+          if (!user) { return done(null, false); }
+          return done(null, user, { scope: 'all' });
+        });
+      }
+    ));
 
 	passport.serializeUser(function(user, done) {
         console.log("passport.js: serialize");
@@ -39,6 +54,7 @@ module.exports = function(passport) {
             // set the user's local credentials
             newUser.local.username = username;
             newUser.local.password = newUser.generateHash(password);
+            newUser.local.token = jwt.encode({username: user.username}, secret);
 
             // save the user
             newUser.save(function(err, user) {
@@ -67,6 +83,7 @@ module.exports = function(passport) {
                 if (!user.validPassword(password))
                     return done("wrong credentials"); // create the loginMessage and save it to session as flashdata
                 
+                console.log("mooi");
 
                 // all is well, return successful user
                 return done(null, user);

@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var passport = require('passport');
 var cookieSession = require('cookie-session');
-var cors = require('cors');
+var expressHbs = require('express3-handlebars');
 
 //Require models and routes and configs
 require('./model/gameboard');
@@ -21,7 +21,10 @@ mongoose.connect(dbConfig.url);
 
 var app = express();
 
-app.use(cors());
+app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
+app.set('view engine', 'hbs');
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -32,7 +35,6 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(express.static(path.join(__dirname, 'public')));
 
 //passport
-app.use(cookieSession({   keys: ['key1', 'key2'] }));
 app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
