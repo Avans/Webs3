@@ -2,29 +2,17 @@ var request = require('supertest');
 var expect = require('chai').expect;
 var should = require('chai').should();
 
-module.exports = function(app, Gameboard){
-	
-	describe('On Path /Gameboard ', function(){
+module.exports = function(app, Game, Gameboard, gToken, gUserId){
 
-		it('should GET return a resource', function(done){
 
-			request(app)
-				.get('/gameboards')
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					res.body.should.have.length(2);
-					done(null, res);
-				});
-		});
+	describe('On Path /Games/1/Gameboards ', function(){
 
 		it('should POST return success', function(done){
 
 			var gameboard = {_id: 3};
 
 			request(app)
-				.post('/gameboards')
+				.post('/games/1/gameboards?token=' + gToken)
        			.send(gameboard)
 				.expect(200)
 				.end(function(err, res){
@@ -32,11 +20,38 @@ module.exports = function(app, Gameboard){
 
 					expect(res.text).to.equal("success");
 
-					Gameboard.find().exec(function(err, result){
-						result.should.have.length(3);
+					Game.findById(1).exec(function(err, game){
+						should.exist(game.board2);
+						game.status.should.equal(Game.schema.status.started);
 						done(null, res);
 					});
 				});
 		});
+
+	});
+
+	describe('On Path /Games/3/Gameboards ', function(){
+
+		it('should POST return success', function(done){
+
+			var gameboard = {_id: 5};
+
+			request(app)
+				.post('/games/3/gameboards?token=' + gToken)
+       			.send(gameboard)
+				.expect(200)
+				.end(function(err, res){
+					if(err){ return done(err); }
+
+					expect(res.text).to.equal("success");
+
+					Game.findById(3).exec(function(err, game){
+						should.not.exist(game.board1);
+						game.status.should.equal(Game.schema.status.setup);
+						done(null, res);
+					});
+				});
+		});
+
 	});
 }

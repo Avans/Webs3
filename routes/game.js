@@ -5,38 +5,43 @@ var _ = require('underscore');
 var router = express.Router();
 var Game = mongoose.model('Game');
 var Gameboard = mongoose.model('Gameboard');
+var User = mongoose.model('User');
+var token = require('../modules/tokenModule');
 
-/** --------  ALl the routes to  /game --------------**/
+/** --------  ALl the routes to  /games --------------**/
+/** Req.user is available **/
 /**	All the routes for the gameboard **/
 router.route('/')
 
-	/** -------------    GET /game ------------------**/
+	/** -------------    GET /games ------------------**/
 	/** All the gameboards that currently are active **/
-	.get(function(req, res, next) {
+	.get(token.validate, function(req, res, next) {
 		
-		Game
-			.find({player2: undefined})
+		Game.find({player2: undefined})
 			.exec(function(err, games){
 
 				//Select first game
 				var game = games[0];
 				//Todo: Replace 'currentUser' with username of current username
-				var currentUser =  "currentUser";
+				var currentUser =  req.user;
 
-				if(game) //If game found, add current player and return game
+				if(game && game.player1.equals(req.user._id))
+				{
+					res.json({msg: "Error: You are currently pending for a game."})
+				}
+				else if(game) //If game found, add current player and return game
 				{
 
-					game.player2 = currentUser;
+					game.player2 = req.user._id;
 					game.status = Game.schema.status.setup;
 					game.save(function(err, done){
 						res.send(game);
 					});
 				}
-				
 				else //If no available game found, make a new one
 				{
 
-					newGame = new Game({player1: currentUser});
+					newGame = new Game({player1: req.user._id});
 					newGame.status = Game.schema.status.que;
 					newGame.save(function(err, newGame){
 						res.send(newGame);
@@ -45,54 +50,71 @@ router.route('/')
 			});
 	});
 
-router.route('/:id/gameboards')
-
-	.post(function(req, res, next) {
-
-		var gameboard = new Gameboard(req.body);
-
-		Game
-			.findById(req.params.id)
-			.exec(function(err, game){
-
-				if(game.status === Game.schema.status.setup)
-				{
-					gameboard.save(function(err, gameboard){
-						//check for errors
-						if(err){res.json(err);}
-						else{
-
-							//if board 1 is not yet set
-							if(!game.board1)
-							{
-								//TODO: bord moet gekozen worden o.b.v. currentUser
-								game.board1 = gameboard._id;
-								game.save(function(err, game){
+/** --------  ALl the routes to  /games/:id --------------**/
+/** Req.user is available **/
+/**	All the routes for the gameboard **/
+ router.route('/:id')
 	
-									if(err){res.json(err);}
-									else {res.send("success");}
-								});
-							}
-							else
-							{
-								//TODO: bord moet gekozen worden o.b.v. currentUser
-								game.board2 = gameboard._id;
-								game.status = Game.schema.status.started;
+	/** -------------    GET /game:/id ------------------**/
+	/** Return the specified game by id if the user is part of the game. **/
+ 	.get(token.validate, function(req, res, next){
+ 		
+ 		var userId = req.user._id;
 
-								game.save(function(err, game){
-									if(err){res.json(err);}
-									else{res.send("success");}
-								});
-							}
-						}
-					});
-				}
-				else
-				{
-					res.send("Het is niet mogelijk om een gameboard te submitten naar een game met de status " + game.status);
-				}
+		Game.findById(req.params.id)
+			.exec(function(err, game){
+				if(!game)
+					return res.json({msg: "Error: No game found with id " + gameId});
+				else{
+					
+					if(game.containsPlayer(userId))
+			 		{
+			 			var result = {
+			 				_id: game._id, 
+			 				status: game.status,
+			 				yourTurn: game.turn == req.user._id,
+			 			};
 
+			 			if(game.status != "que")
+			 			{
+			 				var enemyId = game.player1;
+			 				if(game.player1.equals(req.user._id))
+			 					enemyId = game.player2;
+
+			 				//Get the user element of the enemy player
+			 				User.findById(enemyId, function(err, enemy){
+
+				 				result.enemyId = enemy._id;
+				 				result.enemyName = enemy.local.email;
+
+				 				if(game.status != "setup")
+				 				{
+				 					game.getMyGameboard(userId, function(err, myGameboard){
+						 				game.getEnemyGameboard(userId, function(err, enemyGameboard){
+						 					enemyGameboard.ships = undefined;
+						 					result.myGameboard = myGameboard,
+						 					result.enemyGameboard = enemyGameboard,
+						 					res.json(result);
+						 				});
+						 			});
+				 				}
+				 				else
+				 				{
+				 					res.json(result);
+				 				}
+			 				})
+			 			}
+			 			else
+			 			{
+			 				res.json(result);
+			 			}
+			 		}
+			 		else
+			 		{
+			 			res.json({msg: "Error: You are not a player in this game.", gameId: game._id });
+			 		}
+				}//Else Game!
 			});
-	});
+ 	});
 
 module.exports = router;

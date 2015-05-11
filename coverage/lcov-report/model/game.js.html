@@ -18,16 +18,16 @@
     <h1>Code coverage report for <span class="entity">model\game.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">100% <small>(8 / 8)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">83.87% <small>(26 / 31)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">58.33% <small>(7 / 12)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">100% <small>(0 / 0)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">100% <small>(5 / 5)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">100% <small>(8 / 8)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">83.87% <small>(26 / 31)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
@@ -60,7 +60,61 @@
 23
 24
 25
-26</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79</td><td class="line-coverage"><span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -81,24 +135,77 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span></td><td class="text"><pre class="prettyprint lang-js">var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Gameboard = mongoose.model("Gameboard");
 &nbsp;
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
 &nbsp;
 var gameSchema = new Schema({
   _id: Number,
-  player1: { type: String, required: true}, 
-  player2: String, 
+  player1: { type: Schema.Types.ObjectId, ref: 'User'}, 
+  player2: { type: Schema.Types.ObjectId, ref: 'User'},
   board1: {  type: Number, ref: 'Gameboard' },
   board2: {  type: Number, ref: 'Gameboard' },
   status: {  type: String, enum: [ "que", "setup", "started", "done"]},
-  turn: { type: String, enum: ["p1", "p2"]}
+  turn: { type: Schema.Types.ObjectId }
 });
 &nbsp;
 gameSchema.plugin(autoIncrement.plugin, 'Game');
@@ -110,12 +217,64 @@ gameSchema.status = {
 	done: "done;"
 };
 &nbsp;
+gameSchema.statics.myGames = function search (userId, cb) {
+    this.find({$or : [{player1: userId}, {player2: userId}]})
+      .populate('player2')
+      .populate('player1').exec(cb);
+}
+&nbsp;
+gameSchema.methods.start = function(){
+   this.status = "started";
+   var firstTurnToPlayer1 = Math.floor(Math.random());
+&nbsp;
+   <span class="missing-if-branch" title="if path not taken" >I</span>if(firstTurnToPlayer1)
+<span class="cstat-no" title="statement not covered" >      this.turn = this.player1;</span>
+    else
+      this.turn = this.player2;
+}
+&nbsp;
+gameSchema.methods.containsPlayer = function(playerId)
+{
+  return this.player1.equals(playerId) || this.player2.equals(playerId);
+}
+&nbsp;
+/** ------ GetMyGameboard -------- **/
+/** Returns a fully filled gameboard that you own **/
+gameSchema.methods.getMyGameboard = function(playerId, callback)
+{
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(this.player1.equals(playerId)){
+<span class="cstat-no" title="statement not covered" >      Gameboard.findById(this.board1, callback);</span>
+    }
+    else <span class="missing-if-branch" title="else path not taken" >E</span>if(this.player2.equals(playerId)){
+      Gameboard.findById(this.board2, callback);
+    }
+    else{
+<span class="cstat-no" title="statement not covered" >      callback({msg: "Error: You are not a player in this game.", gameId: this._id });/</span>/Return without a board :(
+    }
+}
+&nbsp;
+/** ------ GetEnemyGameboard ------------ **/
+/** Returns a semi filled gameboard (without ships) that you do not own **/
+gameSchema.methods.getEnemyGameboard = function(playerId, callback)
+{
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(this.player1.equals(playerId)){
+<span class="cstat-no" title="statement not covered" >       Gameboard.findById(this.board2, callback);</span>
+    }
+    else <span class="missing-if-branch" title="else path not taken" >E</span>if(this.player2.equals(playerId)){
+        Gameboard.findById(this.board1, callback);
+    }
+    else{
+<span class="cstat-no" title="statement not covered" >      callback({msg: "Error: You are not a player in this game.", gameId: this._id });/</span>/Return without a board :(
+    }
+}
+&nbsp;
+&nbsp;
 mongoose.model('Game', gameSchema);</pre></td></tr>
 </table></pre>
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 02 2015 09:14:19 GMT+0200 (W. Europe Daylight Time)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 30 2015 16:23:53 GMT+0200 (W. Europe Daylight Time)</div>
 </div>
 
 <script src="../prettify.js"></script>
