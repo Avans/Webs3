@@ -1,6 +1,21 @@
 function GameboardController(){
 	var self = this;
 
+	self.drawShots = function(shots, player){
+		$.each(shots, function(key, shot){
+
+			var id = CoordHelper.coordtoId(shot);
+			if(shot.isHit){
+				$("#" + id).addClass(player + "_hit");
+			}
+			else{
+				$("#" + id).addClass(player + "_shot");
+			}
+			
+			
+		})
+	};
+
 	self.drawBoats = function(boats){
 		$('#gameboard .cell').removeClass("boat");
 	

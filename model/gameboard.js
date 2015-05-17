@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 autoIncrement = require('mongoose-auto-increment');
+var _ = require('underscore');
 
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
@@ -19,7 +20,7 @@ autoIncrement.initialize(mongoose.connection);
     shots: [{x: String, y: Number, isHit: Boolean}],
     ships: [{
       isVertical: Boolean, //1 = vertical, 0 = horizontal 
-      shipId: { type: Number, ref: 'Ship' },
+      name:  String,
       length: Number,
       startCell: {x: String, y: Number},
       hits: [{x: String, y: Number}]
@@ -72,13 +73,89 @@ autoIncrement.initialize(mongoose.connection);
             x = String.fromCharCode(x.charCodeAt(0) + 1);
           }
         }
-
-
-
       });
 
       this.shots.push(shot);
       return result;
+  }
+
+  /** 
+  A validation method for the ships on the gameboard.
+  Return: A list of validation errors if the gameboard is not valid
+  parameters: none
+  **/
+
+  gameboardSchema.methods.isValid = function() {
+
+    //the final result
+    var shipValidations = [];
+
+    var xAxis = ['a','b','c','d','e','f','g','h', 'i', 'j'];
+    var yAxis = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    var coveredCells = [];
+    var shipLengths = [2, 3, 3, 4, 5 ];
+
+    if(this.ships.length != 5){
+      shipValidations.push("The collection of ships does not contain 5 ships.")
+      return shipValidations;
+    }
+
+
+    var isValid = true;
+    for(var index = 0; index < 5; index++){
+        
+        var ship = this.ships[index];
+        var coord = {x: ship.startCell.x, y: ship.startCell.y};
+        var shipIsValid = true;
+
+        //Make sure this ship has a correct Length
+        var slIndex = shipLengths.indexOf(ship.length);
+        if (slIndex > -1) { shipLengths.splice(slIndex, 1); }  //Remove the ship from the list
+        else{
+          shipValidations.push("The ship '" + ship.name + "' has an incorrect size of " + ship.length);
+        }
+
+        for(var shipIndex = 0; shipIndex < ship.length; shipIndex++){
+          
+          //We only wanna check for more validation errors if the ship is still valid
+          if(shipIsValid){
+             //Check if X is in bounds 
+            if(!_.contains(xAxis, coord.x)){
+              shipIsValid = false; 
+              shipValidations.push("The ship '" + ship.name + "' is horizontally out of bounds (x)")
+            }
+            
+            //check if Y is in bounds
+            if(!_.contains(yAxis, coord.y)){
+              shipIsValid = false; //We only want 1 validation per ship
+              shipValidations.push("The ship '" + ship.name + "' is verticly out of bounds (y)")
+            }
+
+            //check for overlap
+            if(_.findWhere(coveredCells, coord)){
+              shipIsValid = false; //We only want 1 validation per ship
+              shipValidations.push("The ship '" + ship.name + "' has an overlap with another ship")
+            }
+          }
+         
+          coveredCells.push({x: coord.x, y: coord.y});
+          coord = getNextCoord(coord, ship.isVertical);
+        }
+
+    }
+
+    return shipValidations;
+    //return true of false;
+  };
+
+  function getNextCoord(coord, isVertical){
+    if(isVertical){
+      coord.y++;  
+    }else{
+      coord.x = String.fromCharCode(coord.x.charCodeAt(0) + 1)
+    }
+
+    return coord;
   }
 
   mongoose.model('Ship', shipSchema);

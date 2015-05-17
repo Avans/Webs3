@@ -6,7 +6,7 @@ function GameController(){
 
 	//Methods
 	self.getAllGames = function(){
-		AjaxHelper.GET("users/my/games", {
+		AjaxHelper.GET("users/me/games", {
 			success: function(games){
 				self.games = games;
 				HtmlHelper.renderGameList(self);
@@ -43,10 +43,20 @@ function GameController(){
 		});
 	}
 
+	self.newGameAI = function(){
+		AjaxHelper.GET("games/AI", {
+			success: function(newGame){
+				debugger;
+				self.getAllGames(); //Refresh the games
+			}
+		});
+	}
+
 	//event
 	$("#myGames").on("click", ".gameItem", function(event){
 		var id = $(this).attr("id");
 		self.selectGame(id)
 	});
 	$('#newGame').bind("click", function(){self.newGame()});
+	$('#newGameAI').bind("click", function(){self.newGameAI()});
 };

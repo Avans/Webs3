@@ -2,15 +2,25 @@ var request = require('supertest');
 var expect = require('chai').expect;
 var should = require('chai').should();
 
-module.exports = function(app, Gameboard, gToken){
+
+module.exports = function(app, Gameboard, gToken, Game){
 
 
-	describe('On Path /games/1/gameboards/4/shots ', function(){
+	describe('On Path /games/1/shots ', function(){
+
+		beforeEach(function(done) {
+	        Game.findById(1, function(err, game){
+	        	game.turn = "552b73580bab5a9c65610037";
+	        	game.save(function(err, game){
+	        		done();
+	        	});
+	        });
+	    });
 
 		it('should POST return BOOM and add a hit', function(done){
 
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send({x: 'a', y: 1})
 				.expect(200)
 				.end(function(err, res){
@@ -30,7 +40,7 @@ module.exports = function(app, Gameboard, gToken){
 		it('should POST return SPLASH and add a shot', function(done){
 
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send({x: 'c', y: 3})
 				.expect(200)
 				.end(function(err, res){
@@ -51,7 +61,7 @@ module.exports = function(app, Gameboard, gToken){
 		it('should POST return FAIL and NOT add a shot', function(done){
 
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send({x: 'g', y: 6})
 				.expect(200)
 				.end(function(err, res){
@@ -68,25 +78,12 @@ module.exports = function(app, Gameboard, gToken){
 				});
 		});
 
-		it('should POST with wrong ID return ERROR', function(done){
-
-			request(app)
-				.post('/games/1/gameboards/18/shots?token=' + gToken)
-				.send({x: 'g', y: 6})
-				.expect(200)
-				.end(function(err, res){
-					if(err){ return done(err); }
-
-					expect(res.body.msg).to.equal("Error: Gameboard with id 18 is not part of game with id 1");
-					done(null, res);
-				});
-		});
 
 		it('should POST without data return ERROR', function(done){
 			var data = {};
 
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.expect(200)
 				.end(function(err, res){
 					if(err){ return done(err); }
@@ -101,7 +98,7 @@ module.exports = function(app, Gameboard, gToken){
 
 			var data = {x: 'a'};
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send(data)
 				.expect(200)
 				.end(function(err, res){
@@ -116,7 +113,7 @@ module.exports = function(app, Gameboard, gToken){
 		it('should POST without X return ERROR', function(done){
 			var data = {y: '2'};
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send(data)
 				.expect(200)
 				.end(function(err, res){
@@ -133,7 +130,7 @@ module.exports = function(app, Gameboard, gToken){
 			var data = { x: 'a', y : 'c'};
 
 			request(app)
-				.post('/games/1/gameboards/4/shots?token=' + gToken)
+				.post('/games/1/shots?token=' + gToken)
 				.send(data)
 				.expect(200)
 				.end(function(err, res){

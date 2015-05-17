@@ -7,10 +7,48 @@
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 			<!-- Latest compiled and minified JavaScript -->
 			<link rel="stylesheet" href="/stylesheets/style.css" >
+			<style>
+				body { padding-top: 70px; }
+				.fixed{ position: fixed;}
+				.docs > section{
+					border-bottom: 1px solid gray;
+					padding-top:40px;
+				}
+			</style>
 	</head>
 	<body>
 
-		<h3>ZeeSlag</h3>
+		<nav class="navbar navbar-default navbar-fixed-top">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="/">Zeeslag</a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      <ul class="nav navbar-nav">
+		        <li><a href="/docs">Docs</a></li>
+		      </ul>
+		     
+		      <ul class="nav navbar-nav navbar-right">
+		      	{{#if user.local.email }} 
+		        	<li><a href="/profile">Profile</a></li>
+		        	<li><a href="/logout">Logout</a></li>
+		        {{else}}
+		        	<a href="/login" type="button" class="btn btn-default navbar-btn">Sign in</a>
+		        {{/if}}
+		      </ul>
+
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
 
 		<div class="container">
 			{{{body}}}

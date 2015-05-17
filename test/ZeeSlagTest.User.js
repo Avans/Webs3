@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 module.exports = function(app, Game, User, gToken, gUserId){
 
 	//Kom maar door met ide tests
-	describe('On Path /users/my/games', function(){
+	describe('On Path /users/me/games', function(){
 
 		before('Hook: before test set', function(done) {
 
@@ -52,7 +52,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 		it('should GET return 2 games with the user as player', function(done){
 
 			request(app)
-				.get('/users/my/games?token=' + gToken)
+				.get('/users/me/games?token=' + gToken)
 				.expect(200)
 				.end(function(err, res){
 					if(err){ return done(err); } 

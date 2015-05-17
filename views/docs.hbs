@@ -1,0 +1,258 @@
+<div class="col-sm-6 col-sm-offset-4 docs">
+
+	<h1><span class="fa fa-sign-in"></span>Docs</h1>
+
+	<section class="" id="APIKEY" data-spy="APIKEY" data-target="#APIKEY">
+		
+		<h3>De API Key</h3>
+
+		<p>
+			Het is alleen mogelijk om data van de server op te halen door aan elk request een API key toe te voegen. 
+			Deze key vertelt de server iets over wie je bent. 
+			Je kunt deze key aanvragen op deze website door je zelf te registreren. 
+			Op de <a href="/profile">profile</a> pagina kun je deze key terug vinden. 
+		</p>
+
+		<p>
+			Als je een "API key" hebt ontvangen kun je informatie op gaan vragen aan de server.
+			Klik bijvoorbeeld maar eens op de onderstaande link.
+		</p>
+
+		{{#if user.local.email }} 
+			<p>
+				<a href="/users/me/games?token={{user.local.token}}" target="blank">/users/me/games?token={{user.local.token}}</a>
+			</p>
+		{{else}}
+		<p class="bg-warning">De link is niet zichtbaar want je niet bent ingelogd</p>
+		{{/if}}
+		<p>Door achter de de <b>route</b> een parameter met de naam <b>token</b> te zetten kun je de API key meegeven.</p>
+
+		<pre>/users/my/games?token=&lt&lttoken here&gt&gt</pre>
+
+		<p>Vergeet deze token niet mee te geven anders krijg je een error!</p>
+
+		
+
+	
+	</section>
+	<section class="" id="spelregels" data-spy="spelregels" data-target="#spelregels">
+		
+		<h3>Spelregels</h3>
+
+		<p>
+			Zeeslag is een spel met maar een basis set aan spel regels.
+			Het model wat we gaan gebruiken om informatie op te halen en op te slaan is ook niet heel er ingewikkeld. 
+		</p>
+
+		<p>
+			Het doel van zeeslag is het laten <b>zinken</b> van alle schepen van de tegenstander. De schepen bevinden zich op een Grid van <b>10x10</b> vakjes. Bij het opzetten (setup) van het spel moeten de beiden spelers de schepen op het bord plaatsen. In de digitale vorm heeft elk schip een start vakje, lengte en oriëntatie (Verticaal of horizontaal). 
+		</p>
+
+		<p>
+			Als beide spelers klaar zijn kan het spel beginnen. (started) Elke speler kan een vakje van de tegenstander <b>beschieten</b>. De tegenstander moet dan aangeven of het een <b>BOEM</b> of een <b>PLONS</b> is. Beiden spelers kunnen bijhouden welke schoten ze hebben uitgevoerd en of het schot raak was of niet. 
+		</p>
+
+		<p>
+			Als een speler alle schepen van de tegenstander heeft laten zinken, wint hij het spel!
+		</p>
+
+		<p>
+			De specifieke implementatie van elk onderdeel van het spel vind je onder het onderdeel <b>Routes</b>.
+		</p>
+
+		<h4>De flow van het spel</h4>
+
+		<ol>
+			<li>Speler A vraagt een game aan</li>
+			<li>Speler A komt in een game met de status <b>que</b></li>
+			<li>Speler B vraagt een game aan</li>
+			<li>Speler B komt in de game van speler A met de status <b>setup</b></li>
+			<li>Speler A submit een gameboard (lijst van schepen)</li>
+			<li>De game blijft in de status <b>started</b></li>
+			<li>Speler B submit een gameboard (lijst van schepen)</li>
+			<li>De game heeft nu de status <b>started</b></li>
+			<li>Speler A submit een schot op het gameboard van speler B</li>
+			<li>Speler B submit een schot op het gameboard van speler A</li>
+			<li>De game kan nu de status <b>done</b> hebben. Zo niet, herhaal stap 9 en 10</li>
+		</ol>
+
+	</section>
+	<section class="" id="megames" data-spy="megames" data-target="#megames">
+		
+		<h3>/users/me/games</h3>
+
+		<p class="bg-success">GET</p>
+
+		<p>Via deze route krijg je een collectie van games waarin jij mee speelt. Elke game heeft de volgende eigenschappen:
+			<ul>
+				<li>Unique ID van de game</li>
+				<li>Unique ID van de tegenstander</li>
+				<li>De naam van de tegenstander</li>
+			</ul>
+		</p>
+
+<pre>
+[
+  { 
+  	"_id":21,"status":"setup",
+  	"enemyId":"55268f3aa43c82a4244bb00c",
+  	"enemyName":"rechtsonder@gmail.com 
+  },
+  {"
+  	_id":19,"status":"started",
+   "enemyId":"55268f3aa43c82a4244bb00a"
+   ,"enemyName":"rechtsboven@gmail.com" 
+  },
+  {
+  	"_id":22,"status":"started",
+  	"enemyId":"55268f3aa43c82a4244bb00a",
+  	"enemyName":"rechtsboven@gmail.com" 
+  },
+  {
+  	"_id":23,"status":"started",
+  	"enemyId":"55268f3aa43c82a4244bb00a",
+  	"enemyName":"rechtsboven@gmail.com"
+  }
+]</pre>
+
+	</section>
+	<section class="" id="newGame" data-spy="newGame" data-target="#newGame">
+		
+		<h3>/games</h3>
+
+		<p class="bg-success">GET</p>
+
+		<p>Via deze route kun je een nieuwe game opvragen</p>
+
+	</section>
+	<section class="" id="theGame" data-spy="theGame" data-target="#theGame">
+		
+		<h3>/games/:id</h3>
+
+		<p class="bg-success">GET</p>
+
+			<p>
+			Elke gebruiker heeft een collectie van <b>games</b>. Je kan een nieuwe game aanvragen en hebt hier de keuze of je tegen computer of mens wilt spelen. 
+		</p>
+
+		<p>Elke game heeft de volgende eigenschappen
+			<ul>
+				<li>Een status ("que" | "setup" | "started" | "done"</li>
+				<li>Your Turn ("true" of "false")</li>
+				<li>Enemy Id en enemy Name</li>
+				<li>My gameboard en enemy gameboard</li>
+			</ul>
+		</p>
+
+		<pre>
+{
+  "_id":23,
+  "status":"started",
+  "yourTurn":false,
+  "enemyId":"55268f3aa43c82a4244bb00a",
+  "enemyName":"rechtsboven@gmail.com",
+  "myGameboard":{
+	"_id":20,
+	"__v":3,
+	"ships":[{
+	  "length":2,
+	  "isVertical":true,
+	  "_id":"554239de10da4dc04faacdaf",
+	  "hits":[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
+	  "startCell":{"x":"i","y":1}
+	},
+	{
+	  "length":1,"isVertical":true,
+	  "_id":"554239de10da4dc04faacdae",
+	  "hits":[],
+	  "startCell":{"x":"h","y":1}
+	},
+	{
+	  "length":3,
+	  "isVertical":true,
+	  "_id":"554239de10da4dc04faacdad",
+	  "hits":[],
+ 	  "startCell":{"x":"i","y":3}
+	}]
+  },
+  enemyGameboard":{"
+    _id":21,"
+    __v":3,
+    "shots":[
+    	{"x":"c","y":2,"_id":"55423a7610da4dc04faacdb4"},
+    	{"x":"e","y":2,"_id":"55423a7f10da4dc04faacdb6"},
+    	{"x":"d","y":2,"isHit":true,"_id":"55423a8510da4dc04faacdb9"}
+    ]
+  }
+}</pre>
+
+
+	</section>
+	<section class="" id="ships" data-spy="ships" data-target="#ships">
+		
+		<h3>/ships</h3>
+
+
+		<p class="bg-success">GET</p>
+
+		<p>content</p>
+
+	</section>
+
+	<section class="" id="gameboards" data-spy="gameboards" data-target="#gameboards">
+		
+		<h3>/games/:id/gameboards</h3>
+
+		<p class="bg-danger">POST</p>
+
+
+		<p>Een gameboard heeft de volgende eigenschappen
+			<ul>
+				<li>Een Lijst van schepen</li>
+				<li>Een lijst van schoten</li>
+			</ul>
+			Bij het gameboard van de tegenstander heb je alleen toegang tot de lijst van schoten. Met de informatie kun je zien waar je al een keer geschoten hebt. 
+		</p>	
+
+
+	</section>
+	<section class="" id="shots" data-spy="shots" data-target="#shots">
+		
+		<h3>/games/:gameId/shots</h3>
+
+
+		<p class="bg-danger">POST</p>
+
+		<p>content</p>
+
+	</section>
+
+
+
+
+</div>
+
+<div class="col-sm-2 fixed">
+
+
+   <ul class="nav nav-list">
+   		<li>Getting started
+   			<ul class="nav nav-list">
+   				<li><a href="#APIKEY">De API key</a></li>
+   				<li><a href="#spelregels">De spelregels</a></li>
+   			</ul>
+   		</li>
+   		<li>Routes
+   			<ul class="nav nav-list">
+   				<li><a href="#megames">/users/me/games</a></li>
+   				<li><a href="#newGame">/games</a></li>
+   				<li><a href="#theGame">/games/:id</a></li>
+   				<li><a href="#ships">/ships</a></li>
+   				<li><a href="#gameboards">/games/:id/gameboards</a></li>
+   				<li><a href="#shots">/games/:id/shots</a></li>
+   			</ul>
+   		</li>
+
+      
+    </ul>
+</div>

@@ -103,7 +103,7 @@ describe('Test that depend on routes', function(){
 	});
 	
 	describe('2. All the test for the route Shot (ZeeSlagTest.Shot)', function(){
-		require('./ZeeSlagTest.Shot')(app, Gameboard, gToken);
+		require('./ZeeSlagTest.Shot')(app, Gameboard, gToken, Game);
 	});
 
 	describe('3. All the test for the route Game (ZeeSlagTest.Game)', function(){

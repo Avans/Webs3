@@ -5,16 +5,32 @@ function BoatController(){
 	self.boats = [];
 
 	self.getAllBoats = function(){
-		
-		//Dummy data
-		self.boats = [
-			{id: 2, length: 2, startCell: null, name: "Santa Maria", isVertical: true},
-			{id: 1, length: 1, startCell: null, name: "C.S.S. Hunley", isVertical: true},
-			{id: 3, length: 3, startCell: null, name: "U.S.S. Constituation", isVertical: true},
-			{id: 5, length: 5, startCell: null, name: "Bismarck", isVertical: true},
-		];
 
-		HtmlHelper.renderBoats(self);
+		AjaxHelper.GET("ships", {
+			success: function(ships){
+
+				debugger;
+				for(var i = 0; i < ships.length; i++){
+					var ship = ships[i];
+					ship.isVertical = true;
+					ship.startCell = null;
+					self.boats.push(ship);
+				}
+	
+				HtmlHelper.renderBoats(self);
+			}
+		});
+		
+		// //Dummy data
+		// self.boats = [
+		// 	{id: 2, length: 2, startCell: null, name: "Santa Maria", isVertical: true},
+		// 	{id: 1, length: 3, startCell: null, name: "C.S.S. Hunley", isVertical: true},
+		// 	{id: 3, length: 3, startCell: null, name: "U.S.S. Constituation", isVertical: true},
+		// 	{id: 5, length: 4, startCell: null, name: "Bismarck", isVertical: true},
+		// 	{id: 6, length: 5, startCell: null, name: "Bismarck HUDGE", isVertical: true},
+		// ];
+
+		
 	}
 
 	self.placeBoat = function(coords){
@@ -30,7 +46,7 @@ function BoatController(){
 	self.selectBoat = function(pId){
 		var id = pId.split("_")[1];
 		$.each(self.boats, function(key, boat){
-			if(boat.id == id){
+			if(boat._id == id){
 				self.selectedBoat = boat;
 				$("#myBoats .selected").removeClass("selected");
 				$("#" + pId).addClass("selected");
@@ -41,7 +57,7 @@ function BoatController(){
 	self.rotateBoat = function(pId){
 		var id = pId.split("_")[1];
 		$.each(self.boats, function(key, boat){
-			if(boat.id == id){
+			if(boat._id == id){
 				console.log(boat);
 				boat.isVertical = !boat.isVertical;
 				self.refreshBoats();
@@ -52,7 +68,7 @@ function BoatController(){
 
 	self.refreshBoats = function(){
 		HtmlHelper.renderBoats(self);
-		$("#boat_" + self.selectedBoat.id).addClass("selected");
+		$("#boat_" + self.selectedBoat._id).addClass("selected");
 	}
 
 	$('#myBoats').on('click', ".rotate", function(event){

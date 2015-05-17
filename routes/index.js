@@ -4,7 +4,16 @@ module.exports = function(app, passport) {
 
 	// show the home page (will also have our login links)
 	app.get('/', function(req, res) {
-		res.render('index');
+		res.render('index', {
+			user : req.user
+		});
+	});
+
+	// PROFILE SECTION =========================
+	app.get('/docs', function(req, res) {
+		res.render('docs', {
+			user : req.user
+		});
 	});
 
 	// PROFILE SECTION =========================

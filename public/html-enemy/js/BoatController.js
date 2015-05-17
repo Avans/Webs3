@@ -9,9 +9,10 @@ function BoatController(){
 		//Dummy data
 		self.boats = [
 			{id: 2, length: 2, startCell: null, name: "Santa Maria", isVertical: true},
-			{id: 1, length: 1, startCell: null, name: "C.S.S. Hunley", isVertical: true},
+			{id: 1, length: 3, startCell: null, name: "C.S.S. Hunley", isVertical: true},
 			{id: 3, length: 3, startCell: null, name: "U.S.S. Constituation", isVertical: true},
-			{id: 5, length: 5, startCell: null, name: "Bismarck", isVertical: true},
+			{id: 5, length: 4, startCell: null, name: "Bismarck", isVertical: true},
+			{id: 6, length: 5, startCell: null, name: "Bismarck HUDGE", isVertical: true},
 		];
 
 		HtmlHelper.renderBoats(self);

@@ -16,7 +16,7 @@ router.route('/')
 	/** -------------    GET /games ------------------**/
 	/** All the gameboards that currently are active **/
 	.get(token.validate, function(req, res, next) {
-		
+
 		Game.find({player2: undefined})
 			.exec(function(err, games){
 
@@ -50,6 +50,17 @@ router.route('/')
 			});
 	});
 
+router.route('/AI')
+
+	.get(token.validate, function(req, res, next){
+			
+		newGame = new Game({player1: req.user._id, player2: "5550b75541902b241e2a9fcc", isAI: true,});
+		newGame.status = Game.schema.status.setup;
+		newGame.save(function(err, newGame){
+			res.send(newGame);
+		});
+	});
+
 /** --------  ALl the routes to  /games/:id --------------**/
 /** Req.user is available **/
 /**	All the routes for the gameboard **/
@@ -72,7 +83,8 @@ router.route('/')
 			 			var result = {
 			 				_id: game._id, 
 			 				status: game.status,
-			 				yourTurn: game.turn == req.user._id,
+			 				yourTurn:  req.user._id.equals(game.turn),
+			 				youWon: req.user._id.equals(game.winner)
 			 			};
 
 			 			if(game.status != "que")

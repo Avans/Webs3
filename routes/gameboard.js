@@ -45,30 +45,31 @@ router.route('/games/:id/gameboards')
 							//add a new gameboard to the game
 							var gameboard = new Gameboard(req.body);
 
-							console.log(req.body);
+							var validationErrors = gameboard.isValid();
 
+							if(validationErrors.length != 0){
+								return res.json({
+									msg: "Error: The gameboard contains validation errors", 
+									validationErrors: validationErrors
+								});
+							}
+							
 							gameboard.save(function(err, gameboard){
 								//check for errors
 								if(err){res.json(err);}
 								else{
-							
-									//user 1 or user 2?
-									if(game.player1.equals(req.user._id))
-										game.board1 = gameboard._id;
-									else
-										game.board2 = gameboard._id;
-									
-									//Are both gameboards posted? Then we can start
-									if(game.board1 && game.board2){
-										game.start();
+
+									//Check if enemy is AI
+									if(game.isAI){
+										var gameboardAI = new Gameboard(req.body);
+										gameboardAI.save(function(err, gameboardAI){
+											SetGameboardsToGame(req, res, game, gameboard, gameboardAI);
+										});
 									}
-									
-									//Save all the games!!
-									game.save(function(err, game){
-							
-										if(err){res.json(err);}
-										else {res.json({msg: "success", status: game.status});}
-									});
+									else
+									{
+										SetGameboardsToGame(req, res, game, gameboard);
+									}
 								}
 							});
 						}
@@ -83,6 +84,29 @@ router.route('/games/:id/gameboards')
 			});
 	});
 
+function SetGameboardsToGame(req, res, game, gameboard, gameboardAI){
+	//user 1 or user 2?
+	if(game.player1.equals(req.user._id))
+	game.board1 = gameboard._id;
+	else
+	game.board2 = gameboard._id;
+
+	if(gameboardAI){
+		game.board2 = gameboardAI._id;
+	}
+		
+	//Are both gameboards posted? Then we can start
+	if(game.board1 && game.board2){
+		game.start();
+	}
+
+	//Save all the games!!
+	game.save(function(err, game){
+		if(err){res.json(err);}
+		else {res.json({msg: "success", status: game.status});}
+	});
+}
+
 
 /** 
 --------  ALl the routes to  /gameboards/:id/shots --------------
@@ -93,14 +117,16 @@ SPLASH: shot added to the board, but no ship hit
 BOOM: shot added to the board and to the hit of the ship 
 FAIL: trying to add a shot that already excists
 **/
-router.route('/games/:gameId/gameboards/enemy/shots')
+router.route('/games/:id/shots')
 	
 	.post(token.validate, function(req, res, next){
 
-		var gameId = req.params.gameId;
+		var gameId = req.params.id;
 
 		Game.findById(gameId)
 			.exec(function(err, game){
+
+				req.game = game;
 
 				//Check if the game excists
 				if(!game)
@@ -120,6 +146,7 @@ router.route('/games/:gameId/gameboards/enemy/shots')
 				//Check if the game is in the right state for adding shots
 				if(game.status === Game.schema.status.started)
 				{
+
 					game.getEnemyGameboard(req.user._id, function(err, gameboard){
 
 						var pShot = req.body;
@@ -160,17 +187,67 @@ router.route('/games/:gameId/gameboards/enemy/shots')
 								}
 								
 								game.save(function(err, game){
-									res.send(response);
+									if(game.isAI){
+										req.result = response;
+										next();
+									}
+									else{
+										res.send(response);
+									}
 								});
 
 							});
 						}
-						else{res.send("FAIL");}
-						
+						else{
+							if(game.isAI)
+							{
+								req.result = "FAIL";
+								next();
+							}
+							else{
+								res.send("FAIL");
+							}
+						}
 					});
 				}
 			});//End of Exec
+	}, function(req, res, next){
+
+		var game = req.game;
+		//If we reach this code, it's the turn of the AI to hit the board1 of the game
+		Gameboard.findById(game.board1, function(err, gameboard){
+
+			var shotFound = true;	
+			while(shotFound){
+				pShot = RandomShot();
+				shotFound = _.findWhere(gameboard.shots, pShot);
+			}
+
+			var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
+
+
+
+			gameboard.save(function(err, gameboard){
+
+				if(gameboard.areAllShipsHit()){
+					game.status = Game.schema.status.done;
+					game.winner = game.player2; //The computer won the game omg!
+				}
+							
+				game.turn = req.user._id;
+				game.save(function(err, game){
+					res.send(req.result);
+				});
+			});
+		});
 	});
+
+function RandomShot(){
+	var possible = "abcdefghij";
+	var y = Math.floor(Math.random() * 9) + 1;
+	var x = possible.charAt(Math.floor(Math.random() * possible.length));
+	return {x: x, y: y};
+}
 
 		
 module.exports = router;

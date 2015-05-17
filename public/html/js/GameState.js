@@ -23,8 +23,6 @@ function SetupState(game){
 			ships: app.boatController.boats
 		};
 
-		console.log(data);
-
 		AjaxHelper.POST("games/" + app.game._id + "/gameboards", data, {
 			success: function(res){
 				console.log(res);
@@ -40,7 +38,10 @@ function SetupState(game){
 function StartedState(game){
 	var self = this;
 
+	app.gameboardController.drawShots(game.enemyGameboard.shots, "me");
 	app.gameboardController.drawBoats(game.myGameboard.ships);
+	app.gameboardController.drawShots(game.myGameboard.shots, "enemy");
+	
 
 	self.drawControls = function(){
 		var cElement = $('#controls');
@@ -63,9 +64,13 @@ function StartedState(game){
 
 	self.shoot = function(coord){
 		
-		AjaxHelper.POST("games/" + app.game._id + "/gameboards/enemy/shots", coord, {
+		AjaxHelper.POST("games/" + app.game._id + "/shots", coord, {
 			success: function(res){
-				console.log(res);
+				AjaxHelper.GET("games/" + game._id, {
+					success: function(game){
+						app.game = new Game(game);
+					},
+				});
 			}
 		});
 	}
@@ -74,6 +79,23 @@ function StartedState(game){
 	//event
 	$("#controls").on("click", "#submit_gameboard", self.surrender)
 };
+
+function DoneState(game){
+	var self = this;
+
+	self.drawControls = function(){
+		console.log(game);
+		var cElement = $('#controls');
+		cElement.append("<h2>Game over</h2>");
+
+		if(game.youWon){
+			cElement.append("<h2>YOU WON THE GAME</H2>")
+		}
+		else{
+			cElement.append("<H3>You lost :(</h3>")
+		}
+	}
+}
 
 
 function BrokenState(){
@@ -97,6 +119,7 @@ GameState = {
 			case "que": state = new QueState(game); break;
 			case "setup": state = new SetupState(game); break;
 			case "started":state = new StartedState(game); break;
+			case "done":state = new DoneState(game); break;
 			default: state = new BrokenState(game); break;
 		}
 

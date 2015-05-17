@@ -18,7 +18,7 @@ module.exports = function(app, Game, Gameboard, gToken, gUserId){
 				.end(function(err, res){
 					if(err){ return done(err); }
 
-					expect(res.text).to.equal("success");
+					expect(res.text).to.equal('{"msg":"success","status":"started"}');
 
 					Game.findById(1).exec(function(err, game){
 						should.exist(game.board2);
@@ -43,7 +43,7 @@ module.exports = function(app, Game, Gameboard, gToken, gUserId){
 				.end(function(err, res){
 					if(err){ return done(err); }
 
-					expect(res.text).to.equal("success");
+					expect(res.text).to.equal('{"msg":"success","status":"setup"}');
 
 					Game.findById(3).exec(function(err, game){
 						should.not.exist(game.board1);

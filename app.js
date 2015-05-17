@@ -61,11 +61,13 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 var gameboard = require('./routes/gameboard');
 var game = require('./routes/game');
 var user = require('./routes/user');
+var ship = require('./routes/ships');
 var index = require("./routes/index")(app, passport);
 
 app.use('/games', game);
 app.use('/', gameboard); //Starts @ root
 app.use('/users', user);
+app.use('/ships', ship);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

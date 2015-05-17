@@ -12,7 +12,7 @@ var token = require('../modules/tokenModule');
 /** --------  ALl the routes to  /users/:id/games --------------**/
 /** Req.user is available **/
 /**	All the routes for the gameboard **/
-router.route('/my/games')
+router.route('/me/games')
 
 	.get(token.validate, function(req, res, next){
 		Game.myGames(req.user._id, function(err, games){

@@ -42,7 +42,26 @@
 	background-color:LightSteelBlue;
 }
 
+.enemy_shot{
+	background-color:orange;
+}
+
+.enemy_hit{
+	background-color:red;
+}
+
+.me_shot{
+	color:orange !important;
+	cursor:not-allowed !important;
+}
+
+.me_hit{
+	color:red !important;
+	cursor:not-allowed !important;
+}
+
 .rotate{
 	color:red;
 	font-size:150%;
 }
+
