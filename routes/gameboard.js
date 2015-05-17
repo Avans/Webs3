@@ -43,7 +43,19 @@ router.route('/games/:id/gameboards')
 						else{
 
 							//add a new gameboard to the game
-							var gameboard = new Gameboard(req.body);
+							var gameboard = new Gameboard();
+							var ships = req.body.ships;
+
+							//Voor de zekerheid nemen we alleen de velden over van ship die nodig zijn 
+							for(var i = 0; i < ships.length; i++){
+								var ship = {
+									startCell: ships[i].startCell,
+									name: ships[i].name, 
+									isVertical: ships[i].isVertical,
+									length: ships[i].length,
+								};
+								gameboard.ships.push(ship);
+							}
 
 							var validationErrors = gameboard.isValid();
 
@@ -55,13 +67,15 @@ router.route('/games/:id/gameboards')
 							}
 							
 							gameboard.save(function(err, gameboard){
+									
 								//check for errors
 								if(err){res.json(err);}
 								else{
 
 									//Check if enemy is AI
 									if(game.isAI){
-										var gameboardAI = new Gameboard(req.body);
+										var gameboardAI = new Gameboard();
+										gameboardAI.ships =  gameboard.ships;
 										gameboardAI.save(function(err, gameboardAI){
 											SetGameboardsToGame(req, res, game, gameboard, gameboardAI);
 										});

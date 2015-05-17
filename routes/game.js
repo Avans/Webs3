@@ -54,7 +54,7 @@ router.route('/AI')
 
 	.get(token.validate, function(req, res, next){
 			
-		newGame = new Game({player1: req.user._id, player2: "5550b75541902b241e2a9fcc", isAI: true,});
+		newGame = new Game({player1: req.user._id, player2: "55590d0ca742e811006bf1e2", isAI: true,});
 		newGame.status = Game.schema.status.setup;
 		newGame.save(function(err, newGame){
 			res.send(newGame);
