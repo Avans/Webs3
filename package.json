@@ -19,6 +19,7 @@
     "express-session": "*",
     "express3-handlebars": "^0.5.2",
     "jwt-simple": "^0.3.0",
+    "mongodb": "^2.0.31",
     "mongoose": "3.8.12",
     "mongoose-auto-increment": "3.2.4",
     "morgan": "~1.5.1",
