@@ -28,8 +28,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "*",
     "serve-favicon": "~2.2.0",
-    "underscore": "^1.8.3",
-    "mongodb": "1.4.9"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^2.2.0",
