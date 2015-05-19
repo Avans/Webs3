@@ -91,6 +91,8 @@
 			</ul>
 		</p>
 
+		<h4>Return value</h4>
+
 <pre>
 [
   { 
@@ -122,7 +124,46 @@
 
 		<p class="bg-success">GET</p>
 
-		<p>Via deze route kun je een nieuwe game opvragen</p>
+		<p>Via deze route kun je een nieuwe game opvragen met als tegenstander een andere student.</p>
+		<p>Als er al een game op de server staat met maar 1 speler, dan zul je deze game joinen, en zal de status naar de game veranderen naar <b>setup</b>. Als er geen game meer open staat, zal de server een nieuwe game voor aanmaken en krijgt deze de status <b>que</b>.
+		<p>Indien je al een game tegen een andere student hebt aangevraagd, zal de server een error terug geven</p>
+
+		<h4>Return value</h4>
+
+		<pre>
+{
+    "_id": 9,
+    "status": "setup | que", 
+    "player1": "<player1Id>",
+    "player2": "<player2Id> | undefined",
+    "__v": 0,
+    "isAI": false
+}
+</pre>
+
+
+	</section>
+	<section class="" id="newGameAI" data-spy="newGameAI" data-target="#newGameAI">
+		
+		<h3>/games/AI</h3>
+
+		<p class="bg-success">GET</p>
+
+		<p>Via deze route kun je een nieuwe game opvragen met als tegenstander een computer. </p>
+
+		<p>De game zal na het aanvragen meteen de status 'setup' krijgen. </p>
+
+		<h4>Return value</h4>
+		<pre>
+{
+    "__v": 0,
+    "_id": 10,
+    "status": "setup",
+    "player1": "<yourId>",
+    "player2": "<computerId>",
+    "isAI": true
+}
+</pre>
 
 	</section>
 	<section class="" id="theGame" data-spy="theGame" data-target="#theGame">
@@ -131,18 +172,38 @@
 
 		<p class="bg-success">GET</p>
 
-			<p>
-			Elke gebruiker heeft een collectie van <b>games</b>. Je kan een nieuwe game aanvragen en hebt hier de keuze of je tegen computer of mens wilt spelen. 
+		<p>
+			Elke gebruiker heeft een collectie van <b>games</b>. Voor elke game kun je alle informatie opvragen doormiddel van het Id. Het is alleen mogelijk gegevens op te halen van een game waar je zelf aan deel neemt. 
 		</p>
+
+		<p>
+		Om bijvoorbeeld de informatie van een game met het Id '7' op te halen, gebruik je de volgende request:
+		</p>
+
+
+		{{#if user.local.email }} 
+			<p>
+				<a href="/games/7?token={{user.local.token}}" target="blank">/games/7?token={{user.local.token}}</a>
+			</p>
+		{{else}}
+		<p class="bg-warning">De link is niet zichtbaar want je niet bent ingelogd</p>
+		{{/if}}
 
 		<p>Elke game heeft de volgende eigenschappen
 			<ul>
 				<li>Een status ("que" | "setup" | "started" | "done"</li>
-				<li>Your Turn ("true" of "false")</li>
+				<li>Your Turn ("true" | "false")</li>
 				<li>Enemy Id en enemy Name</li>
-				<li>My gameboard en enemy gameboard</li>
+				<li>My gameboard en enemy gameboard
+					<ul>
+						<li>MyGameboard heeft een lijst van schepen, en shots</li>
+						<li>EnemyGameboard heeft alleen een lijst van shots</li>
+					</ul>
+				</li>
 			</ul>
 		</p>
+
+		<h4>Return value</h4>
 
 		<pre>
 {
@@ -155,25 +216,19 @@
 	"_id":20,
 	"__v":3,
 	"ships":[{
-	  "length":2,
-	  "isVertical":true,
-	  "_id":"554239de10da4dc04faacdaf",
-	  "hits":[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
-	  "startCell":{"x":"i","y":1}
-	},
-	{
-	  "length":1,"isVertical":true,
-	  "_id":"554239de10da4dc04faacdae",
-	  "hits":[],
-	  "startCell":{"x":"h","y":1}
-	},
-	{
-	  "length":3,
-	  "isVertical":true,
-	  "_id":"554239de10da4dc04faacdad",
-	  "hits":[],
- 	  "startCell":{"x":"i","y":3}
-	}]
+	   "length":2,
+	   "isVertical":true,
+	   "_id":"554239de10da4dc04faacdaf",
+	   "hits":[{"x":"i","y":1,"_id":"55423a8710da4dc04faacdba"}],
+	   "startCell":{"x":"i","y":1}
+	 },
+	 {
+	   "length":3,"isVertical":true,
+	   "_id":"554239de10da4dc04faacdae",
+	   "hits":[],
+	   "startCell":{"x":"h","y":1}
+	 },
+	..etc
   },
   enemyGameboard":{"
     _id":21,"
@@ -197,9 +252,46 @@
 
 		<p>
 		Haal een lijst op van schepen die je op een gameboard kan plaatsen. 
-		De lijst bevat 5 schepen (2, 3 , 3, 4 , 5) waarmee je je gameboard kunt vullen. 
+		De lijst bevat 5 schepen (2, 3 , 3, 4, 5) waarmee je je gameboard kunt vullen. 
 		Na het vullen van het gameboard kun je dit 'posten' naar de server. 
 		</p>
+
+		<h4>Return value</h4>
+
+		<pre>
+[
+    {
+        "_id": 1,
+        "length": 3,
+        "name": "Destoryer",
+        "__v": 0
+    },
+    {
+        "_id": 0,
+        "length": 2,
+        "name": "Patrol boat",
+        "__v": 0
+    },
+    {
+        "_id": 2,
+        "length": 3,
+        "name": "Submarine",
+        "__v": 0
+    },
+    {
+        "_id": 3,
+        "length": 4,
+        "name": "Battleship",
+        "__v": 0
+    },
+    {
+        "_id": 4,
+        "length": 5,
+        "name": "Aircraft carrier",
+        "__v": 0
+    }
+]
+</pre>
 
 
 
@@ -211,18 +303,87 @@
 
 		<p class="bg-danger">POST</p>
 
+		<p>
+			in de fase 'setup' moet je een gameboard naar de server posten. Indien je de eerste speler bent die een gameboard post, zal de fase van de game in 'setup' blijven. Indien beide spelers een gameboard hebben gepost, zal de status van de game veranderen naar 'started'. (Als je tegen een AI speelt veranderd de status altijd meteen naar started).
+		</p>
+		<p>
+			Het gameboard moet voldoen aan logische eisen zoals:
+			<ul>
+				<li>Het bord moet precies 5 schepen bevatten</li>
+				<li>Elk schip moet binnen het bord passen</li>
+				<li>De schepen moeten de juiste lengte hebben</li>
+			</ul>
+		</p>
+
+		<p class="bg-info">
+			<b>Tip</b> - Gebruik de result set van de recourse <b>/ships</b> om een lijst van schepen te maken. 
+			Voeg per 'ship' de volgende properties toe:
+			<ul>
+				<li>Een JSON object met de naam startCell <i>(bijv: {x: 'a', y: 6})</i></li>
+				<li>Een boolean met de naam isVertical</li>
+			</ul>
+		</p>
 
 		<p>Een gameboard heeft de volgende eigenschappen
 			<ul>
 				<li>Een Lijst van schepen</li>
 			</ul>
-			in de fase 'setup' moet je een gameboard naar de server posten. 
-			Het object moet er als volgt uit zien: 
 		</p>	
 
-		<pre>
+		<h4>Post object</h4>
 
-		</pre>
+		<pre>
+{ "ships": [{
+	"_id": 1,
+	"length": 3,
+	"name": "Destoryer",
+	"startCell" : { "x": "a", "y": 1 },
+	"isVertical" : false,
+	"__v": 0
+    },
+    {
+	"_id": 0,
+	"length": 2,
+	"name": "Patrol boat",
+	"startCell" : { "x": "a", "y": 2 },
+	"isVertical" : false,
+	"__v": 0
+    },
+    {
+	"_id": 2,
+	"length": 3,
+	"name": "Submarine",
+	"startCell" : { "x": "a", "y": 3 },
+	"isVertical" : false,
+	"__v": 0
+    },
+    {
+	"_id": 3,
+	"length": 4,
+	"name": "Battleship",
+	"startCell" : { "x": "a", "y": 4 },
+	"isVertical" : false,
+	"__v": 0
+    },
+    {
+	 "_id": 4,
+	 "length": 5,
+	 "name": "Aircraft carrier",
+	 "startCell" : { "x": "a", "y": 5 },
+	 "isVertical" : false,
+	 "__v": 0
+    }]
+}
+</pre>
+	
+		<h4>Return value</h4>
+
+<pre>
+{
+    "msg": "success",
+    "status": "setup | started"
+}
+</pre>
 
 
 	</section>
@@ -233,7 +394,47 @@
 
 		<p class="bg-danger">POST</p>
 
-		<p>content</p>
+		<p>
+			Indien een game de status 'started' heeft, is het mogelijk om echt te gaan spelen. 
+			Elke speler kan omstebeurt een schot toevoegen aan het gameboard van de tegenstander. 
+			Dit doet hij door op de route /games/:gameId/shots een schot te posten. De server zal de schoten bijhouden op het gameboard van de betrokken partij. Een schot op je enemey, voegt een schot toe aan het gameboard van je de enemy.
+		</p>
+
+		<p>
+			Voor het posten van een schot gelden de volgende regels:
+			<ul>
+				<li>Een speler mag alleen een schot posten als het zijn beurt is.</li>
+				<li>Een schot moet binnen het bord vallen</li>
+			</ul>
+		</p>
+
+		<p>
+			De return value van deze resource is anders dan de meeste resources. 
+			Eventuele errors daargelaten, is het mogelijk om 3 responses te krijgen van de server:
+			<ul>
+				<li><b>BOOM</b>: Het schot was raak</li>
+				<li><b>SPLASH</b>: Het schot was mis</li>
+				<li><b>FAIL</b>: Het schot was al eerder uitgevoerd op de aangegeven x en y</li>
+			</ul>
+		</p>
+
+		<p>
+			Indien een schot raak is, zal de server naast een shot aan het gameboard, ook een hit aan het schip toevoegen. 
+			Hierdoor is het makkelijk te zien of een van je schepen al geraakt is, zonder door alle schoten heen te lopen.
+			Daarnaast krijgt elk schot een property 'isHit' met de waarde 'true'. Hierdoor kun je later terug zien welke schoten op het vijandelijk bord raak waren. 
+		</p>
+
+
+		<h4>Post object</h4>
+
+		<pre>
+	{"x": "a", "y": 1 }
+</pre>
+	
+		<h4>Return value</h4>
+		<pre>
+	BOOM | SPLASH | FAIL
+</pre>
 
 	</section>
 
@@ -256,6 +457,7 @@
    			<ul class="nav nav-list">
    				<li><a href="#megames">/users/me/games</a></li>
    				<li><a href="#newGame">/games</a></li>
+   				<li><a href="#newGameAI">/games/AI</a></li>
    				<li><a href="#theGame">/games/:id</a></li>
    				<li><a href="#ships">/ships</a></li>
    				<li><a href="#gameboards">/games/:id/gameboards</a></li>
