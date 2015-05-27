@@ -32,8 +32,6 @@ module.exports = function(app, Gameboard, gToken, Game){
 						gameboard.shots.should.have.length(1);
 						done(null, res);
 					});
-
-					done(null, res);
 				});
 		});
 
@@ -52,8 +50,6 @@ module.exports = function(app, Gameboard, gToken, Game){
 						gameboard.shots.should.have.length(1);
 						done(null, res);
 					});
-
-					done(null, res);
 				});
 		});
 
@@ -73,8 +69,6 @@ module.exports = function(app, Gameboard, gToken, Game){
 						gameboard.shots.should.have.length(1);
 						done(null, res);
 					});
-
-					done(null, res);
 				});
 		});
 
