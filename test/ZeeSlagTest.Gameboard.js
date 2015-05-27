@@ -41,11 +41,11 @@ module.exports = function(app, Game, Gameboard, gToken, gUserId){
 
 		it('should POST return success', function(done){
 
-			var gameboard = {_id: 5};
+			var post = {'ships': ships_array};
 
 			request(app)
 				.post('/games/3/gameboards?token=' + gToken)
-       			.send(gameboard)
+       			.send(post)
 				.expect(200)
 				.end(function(err, res){
 					if(err){ return done(err); }
