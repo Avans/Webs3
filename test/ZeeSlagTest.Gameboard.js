@@ -4,16 +4,23 @@ var should = require('chai').should();
 
 module.exports = function(app, Game, Gameboard, gToken, gUserId){
 
+	var ships_array = [
+				{name: 'a', isVertical: true, length: 2, startCell: {x: 'f', y: 1}},
+				{name: 'b', isVertical: true, length: 3, startCell: {x: 'g', y: 2}},
+				{name: 'c', isVertical: false, length: 3, startCell: {x: 'a', y: 9}},
+				{name: 'd', isVertical: false, length: 5, startCell: {x: 'a', y: 1}},
+				{name: 'e', isVertical: false, length: 4, startCell: {x: 'a', y: 10}},
+			];
 
 	describe('On Path /Games/1/Gameboards ', function(){
 
 		it('should POST return success', function(done){
 
-			var gameboard = {_id: 3};
+			var post = {'ships': ships_array};
 
 			request(app)
 				.post('/games/1/gameboards?token=' + gToken)
-       			.send(gameboard)
+				.send(post)
 				.expect(200)
 				.end(function(err, res){
 					if(err){ return done(err); }
