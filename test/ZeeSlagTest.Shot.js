@@ -28,8 +28,8 @@ module.exports = function(app, Gameboard, gToken, Game){
 
 					expect(res.text).to.equal("BOOM");
 
-					Gameboard.find(4).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
+					Gameboard.findById(4).exec(function(err, gameboard){
+						gameboard.shots.should.have.length(2);
 						done(null, res);
 					});
 				});
@@ -46,8 +46,8 @@ module.exports = function(app, Gameboard, gToken, Game){
 
 					expect(res.text).to.equal("SPLASH");
 
-					Gameboard.find(1).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
+					Gameboard.findById(4).exec(function(err, gameboard){
+						gameboard.shots.should.have.length(3);
 						done(null, res);
 					});
 				});
@@ -65,8 +65,8 @@ module.exports = function(app, Gameboard, gToken, Game){
 
 					expect(res.text).to.equal("FAIL");
 
-					Gameboard.find(1).exec(function(err, gameboard){
-						gameboard.shots.should.have.length(1);
+					Gameboard.findById(4).exec(function(err, gameboard){
+						gameboard.shots.should.have.length(3);
 						done(null, res);
 					});
 				});
