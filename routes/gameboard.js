@@ -26,6 +26,10 @@ router.route('/games/:id/gameboards')
 
 		var gameId = req.params.id;
 
+		if(!req.body.ships) {
+			return res.json({msg: "Error: JSON should include 'ships' property"});
+		}
+
 		Game.findById(gameId)
 			.exec(function(err, game){
 

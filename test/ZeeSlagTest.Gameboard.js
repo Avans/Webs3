@@ -14,6 +14,19 @@ module.exports = function(app, Game, Gameboard, gToken, gUserId){
 
 	describe('On Path /Games/1/Gameboards ', function(){
 
+		it('should not accept empty object', function(done) {
+
+			var post = {};
+
+			request(app)
+				.post('/games/1/gameboards?token=' + gToken)
+				.send(post)
+				.end(function(err, res) {
+					expect(res.text).to.equal('{"msg":"Error: JSON should include \'ships\' property"}');
+					done(null, res);
+				});
+		});
+
 		it('should POST return success', function(done){
 
 			var post = {'ships': ships_array};
