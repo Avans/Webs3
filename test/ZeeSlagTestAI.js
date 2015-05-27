@@ -50,8 +50,11 @@ var testData = {
 	gToken : "abc",
 	gUserId : "552b73580bab5a9c65610037",
 	gameboardPlayer : { ships: [
-		{shipId: 1, isVertical: true, length: 2, startCell: {x: 'a', y: 0}, his: []},
-		{shipId: 2, isVertical: false, length: 2, startCell: {x: 'b', y: 4}, hits: []}
+		{name: 'a', isVertical: true, length: 2, startCell: {x: 'f', y: 1}},
+		{name: 'b', isVertical: true, length: 3, startCell: {x: 'g', y: 2}},
+		{name: 'c', isVertical: false, length: 3, startCell: {x: 'a', y: 9}},
+		{name: 'd', isVertical: false, length: 5, startCell: {x: 'a', y: 1}},
+		{name: 'e', isVertical: false, length: 4, startCell: {x: 'a', y: 10}},
 	], shots: [] },
 	GetGameAndBoards : function(callback){
 
@@ -152,8 +155,8 @@ describe('Test that depend on AI', function(){
 				testData.GetGameAndBoards(function(game, board1, board2){
 
 					//Assert
-					expect(board1.ships.length).to.equal(2);
-					expect(board2.ships.length).to.equal(2);
+					expect(board1.ships.length).to.equal(5);
+					expect(board2.ships.length).to.equal(5);
 
 					done();
 				});
