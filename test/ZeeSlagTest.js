@@ -49,6 +49,8 @@ describe('Test that depend on routes', function(){
 
 	before('Hook: before test set', function(done) {
 		User.collection.remove();
+		Gameboard.collection.remove();
+		Game.collection.remove();
 
 		async.parallel([
 				function(cb){
