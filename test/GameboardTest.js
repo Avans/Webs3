@@ -185,7 +185,7 @@ describe('Test that depend on model Gameboard', function(){
 
 			var result = gameboard.isValid();
 			expect(result.length).to.equal(1);
-			expect(result[0]).to.equal("The collection of ships does not contain 4 ships.");
+			expect(result[0]).to.equal("The collection of ships does not contain 5 ships.");
 			done();
 		});
 
