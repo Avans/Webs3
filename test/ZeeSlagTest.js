@@ -48,6 +48,7 @@ var gUserId = "552b73580bab5a9c65610037";
 describe('Test that depend on routes', function(){
 
 	before('Hook: before test set', function(done) {
+		User.collection.remove();
 
 		async.parallel([
 				function(cb){
