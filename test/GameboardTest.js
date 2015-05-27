@@ -10,13 +10,13 @@ require('../model/gameboard');
 //Model setup
 var Gameboard = mongoose.model('Gameboard');
 var Ship = mongoose.model('Ship');
-var gameboard; 
+var gameboard;
 var defaultShips;
 
 describe('Test that depend on model Gameboard', function(){
 
 	before('hook: before test set', function(done){
-		
+
 		gameboard = new Gameboard({
 			_id: 1,
 			ships: [
@@ -29,7 +29,7 @@ describe('Test that depend on model Gameboard', function(){
 	});
 
 	it('isShipHit that should return true A0 on ship 1', function(done){
-		
+
 		var result = gameboard.isShipHit({x: 'a', y: 0});
 
 		expect(result).to.equal(true);

@@ -53,7 +53,7 @@ router.route('/')
 router.route('/AI')
 
 	.get(token.validate, function(req, res, next){
-			
+
 		newGame = new Game({player1: req.user._id, player2: "55590d0ca742e811006bf1e2", isAI: true,});
 		newGame.status = Game.schema.status.setup;
 		newGame.save(function(err, newGame){
@@ -65,11 +65,11 @@ router.route('/AI')
 /** Req.user is available **/
 /**	All the routes for the gameboard **/
  router.route('/:id')
-	
+
 	/** -------------    GET /game:/id ------------------**/
 	/** Return the specified game by id if the user is part of the game. **/
  	.get(token.validate, function(req, res, next){
- 		
+
  		var userId = req.user._id;
 
 		Game.findById(req.params.id)
@@ -77,11 +77,11 @@ router.route('/AI')
 				if(!game)
 					return res.json({msg: "Error: No game found with id " + gameId});
 				else{
-					
+
 					if(game.containsPlayer(userId))
 			 		{
 			 			var result = {
-			 				_id: game._id, 
+			 				_id: game._id,
 			 				status: game.status,
 			 				yourTurn:  req.user._id.equals(game.turn),
 			 				youWon: req.user._id.equals(game.winner)

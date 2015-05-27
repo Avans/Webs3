@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 module.exports = {
-	
+
 	validate : function(req, res, next)
 	{
 		var token = req.query.token;
@@ -22,7 +22,7 @@ module.exports = {
 		else
 		{
 			var msg = "Error: Reuqest did not contain a API key. Request should use a URl with {{resource}}?token='apikeyhere'";
-			res.json({msg: msg }); 
+			res.json({msg: msg });
 		}
 	}
 

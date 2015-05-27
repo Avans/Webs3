@@ -12,7 +12,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 	//Kom maar door met ide tests
 	describe('On Path /games', function(){
 
-		it('should GET return 1 game with 2 players and status setup', function(done){	
+		it('should GET return 1 game with 2 players and status setup', function(done){
 
 			request(app)
 				.get('/games?token=' + gToken)
@@ -28,7 +28,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				});
 		});
 
-		it('should GET return 1 game with 1 players and status que', function(done){	
+		it('should GET return 1 game with 1 players and status que', function(done){
 
 			request(app)
 				.get('/games?token=' + gToken)
@@ -48,7 +48,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 
 	describe('On Path /games:/1', function(){
 
-		it('should GET return 1 game with filled gameboards', function(done){	
+		it('should GET return 1 game with filled gameboards', function(done){
 
 			request(app)
 				.get('/games/1?token=' + gToken)

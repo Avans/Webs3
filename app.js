@@ -11,7 +11,7 @@ var expressHbs = require('express3-handlebars');
 var flash  = require('connect-flash');
 
 //Require models and routes and configs
-require('./model/gameboard'); 
+require('./model/gameboard');
 require('./model/game');
 require('./model/user');
 

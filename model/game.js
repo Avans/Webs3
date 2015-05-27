@@ -8,7 +8,7 @@ autoIncrement.initialize(mongoose.connection);
 var gameSchema = new Schema({
   _id: Number,
   isAI: { type: Boolean , default: false },
-  player1: { type: Schema.Types.ObjectId, ref: 'User'}, 
+  player1: { type: Schema.Types.ObjectId, ref: 'User'},
   player2: { type: Schema.Types.ObjectId, ref: 'User'},
   board1: {  type: Number, ref: 'Gameboard' },
   board2: {  type: Number, ref: 'Gameboard' },

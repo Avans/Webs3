@@ -46,15 +46,15 @@ var gUserId = "552b73580bab5a9c65610037";
 
 //include te sub tests
 describe('Test that depend on routes', function(){
-	
+
 	before('Hook: before test set', function(done) {
 
 		async.parallel([
 				function(cb){
 					var game1 = new Game({
-						_id: 1, 
+						_id: 1,
 						player1: "552675ef7aa073c044cdc274",
-						player2: gUserId, 
+						player2: gUserId,
 						board1: 4,
 						status: Game.schema.status.setup
 					});
@@ -62,20 +62,20 @@ describe('Test that depend on routes', function(){
 				},
 				function(cb){
 					var game2 = new Game({_id:2, player1: "552675ef7aa073c044cdc274"});
-					game2.save(function(){;cb();});			
+					game2.save(function(){;cb();});
 				},
 				function(cb){
 					var game3 = new Game({
-						_id:3, 
-						player1: "552675ef7aa073c044cdc274", 
-						player2: gUserId, 
+						_id:3,
+						player1: "552675ef7aa073c044cdc274",
+						player2: gUserId,
 						status: Game.schema.status.setup
 					});
-					game3.save(function(){cb();});			
+					game3.save(function(){cb();});
 				},
 				function(cb){
 					var gameboard = new Gameboard({
-							_id: 4, 
+							_id: 4,
 							ships: [
 			 					{shipId: 1, isVertical: true, length: 2, startCell: {x: 'a', y: 0}, his: []},
 			 					{shipId: 2, isVertical: false, length: 2, startCell: {x: 'b', y: 4}, hits: []}
@@ -88,11 +88,11 @@ describe('Test that depend on routes', function(){
 				},
 				function(cb){
 					var user = new User({ _id: gUserId, local: {token: gToken, email: "test@mail.com" }});
-					user.save(function(err, user){console.log(err);cb();});			
+					user.save(function(err, user){console.log(err);cb();});
 				},
 				function(cb){
 					var enemy = new User({ _id: "552675ef7aa073c044cdc274", local: {token: "def", email: "enemy@mail.com" }});
-					enemy.save(function(err, user){console.log(err);cb();});			
+					enemy.save(function(err, user){console.log(err);cb();});
 				},
 			], function(){done();});
 
@@ -101,7 +101,7 @@ describe('Test that depend on routes', function(){
 	describe('1. All the test for the route Gameboard (ZeeSlagTest.Gameboard)', function(){
 		require('./ZeeSlagTest.Gameboard')(app, Game, Gameboard,  gToken);
 	});
-	
+
 	describe('2. All the test for the route Shot (ZeeSlagTest.Shot)', function(){
 		require('./ZeeSlagTest.Shot')(app, Gameboard, gToken, Game);
 	});

@@ -19,9 +19,9 @@ module.exports = function(app, Game, User, gToken, gUserId){
 			async.parallel([
 				function(cb){
 					var game1 = new Game({
-						_id: 1, 
+						_id: 1,
 						player1: "552675ef7aa073c044cdc274",
-						player2: gUserId, 
+						player2: gUserId,
 						board1: 4,
 						status: Game.schema.status.setup
 					});
@@ -29,9 +29,9 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				},
 				function(cb){
 					var game2 = new Game({
-						_id: 2, 
+						_id: 2,
 						player1: gUserId,
-						player2: "552675ef7aa073c044cdc274", 
+						player2: "552675ef7aa073c044cdc274",
 						board1: 4,
 						status: Game.schema.status.que
 					});
@@ -39,8 +39,8 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				},
 				function(cb){
 					var game3 = new Game({
-						_id: 2, 
-						player2: "552675ef7aa073c044cdc274", 
+						_id: 2,
+						player2: "552675ef7aa073c044cdc274",
 						board1: 4,
 						status: Game.schema.status.que
 					});
@@ -55,12 +55,12 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				.get('/users/me/games?token=' + gToken)
 				.expect(200)
 				.end(function(err, res){
-					if(err){ return done(err); } 
+					if(err){ return done(err); }
 
 					res.body.should.have.length(2);
 
 					done();
 				});
-		});	
+		});
 	});
 }

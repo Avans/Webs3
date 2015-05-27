@@ -9,7 +9,7 @@ var async = require('async');
 Ship.find(function(err, ships){
 
 	if(ships.length != 5){
-		
+
 		Ship.collection.remove();
 
 		async.parallel([
@@ -32,7 +32,7 @@ router.route('/')
 		Ship.find(function(err, ships){
 
 			res.json(ships);//Send it away!
-			
+
 		});
 	});
 

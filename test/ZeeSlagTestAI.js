@@ -54,7 +54,7 @@ var testData = {
 		{shipId: 2, isVertical: false, length: 2, startCell: {x: 'b', y: 4}, hits: []}
 	], shots: [] },
 	GetGameAndBoards : function(callback){
-		
+
 		Game.findById(testData.gameId)
 		.exec(function(err, game){
 
@@ -83,17 +83,17 @@ var testData = {
 
 
 describe('Test that depend on AI', function(){
-	
+
 	/** Init the test data **/
 	before('Hook: before test set', function(done) {
 
 		var user = new User({ _id: testData.gUserId, local: {token: testData.gToken, email: "test@mail.com" }});
-		user.save(function(err, user){done();});	
+		user.save(function(err, user){done();});
 
 	});
 
 	/** This is where te tests start
-	This test set has focus on all the aspects of the AI in the routes. 
+	This test set has focus on all the aspects of the AI in the routes.
 	It will test 3 routes, games, gameboards and shots'
 	**/
 	describe('All the Test for requesting a game against an AI', function(){
@@ -127,7 +127,7 @@ describe('Test that depend on AI', function(){
 						testData.gameId = game._id;
 
 						done(null, res);
-					});	
+					});
 				});
 			});
 		});
@@ -154,7 +154,7 @@ describe('Test that depend on AI', function(){
 					//Assert
 					expect(board1.ships.length).to.equal(2);
 					expect(board2.ships.length).to.equal(2);
-					
+
 					done();
 				});
 			});
@@ -171,7 +171,7 @@ describe('Test that depend on AI', function(){
 			.post('/games/' + testData.gameId + '/shots?token=' + testData.gToken)
 			.send(shot)
 			.expect(200)
-			.end(function(err, res){	
+			.end(function(err, res){
 				if(err){ return done(err); }
 
 
@@ -189,7 +189,7 @@ describe('Test that depend on AI', function(){
 			});
 		});
 	});
-		
+
 	after('Hook: after test set', function(done) {
 		 //Gameboard.collection.remove();
 		 //Game.collection.remove();

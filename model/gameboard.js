@@ -6,7 +6,7 @@ var _ = require('underscore');
 var autoIncrement = require('mongoose-auto-increment');
 autoIncrement.initialize(mongoose.connection);
 
-  //autoIncrement.initialize(connection); 
+  //autoIncrement.initialize(connection);
 
   var shipSchema = new Schema({
     name: String,
@@ -19,7 +19,7 @@ autoIncrement.initialize(mongoose.connection);
   var gameboardSchema = new Schema({
     shots: [{x: String, y: Number, isHit: Boolean}],
     ships: [{
-      isVertical: Boolean, //1 = vertical, 0 = horizontal 
+      isVertical: Boolean, //1 = vertical, 0 = horizontal
       name:  String,
       length: Number,
       startCell: {x: String, y: Number},
@@ -31,13 +31,13 @@ autoIncrement.initialize(mongoose.connection);
 
   gameboardSchema.methods.areAllShipsHit = function()
   {
-      var itsOver = true; 
+      var itsOver = true;
 
       for(var index =0; index < this.ships.length; index++){
           if((this.ships[index].hits.length < this.ships[index].length)){
             itsOver = false;
             index = this.ships.length;
-          }            
+          }
       };
 
       return itsOver;
@@ -64,8 +64,8 @@ autoIncrement.initialize(mongoose.connection);
           }
 
           //Increase X or Y depending on Orientation
-          if(ship.isVertical) //If vertical, increase Y 
-          { 
+          if(ship.isVertical) //If vertical, increase Y
+          {
             y++;
           }
           else //If horizontal, increase X
@@ -79,7 +79,7 @@ autoIncrement.initialize(mongoose.connection);
       return result;
   }
 
-  /** 
+  /**
   A validation method for the ships on the gameboard.
   Return: A list of validation errors if the gameboard is not valid
   parameters: none
@@ -103,7 +103,7 @@ autoIncrement.initialize(mongoose.connection);
 
     var isValid = true;
     for(var index = 0; index < 5; index++){
-        
+
         var ship = this.ships[index];
         var coord = {x: ship.startCell.x, y: ship.startCell.y};
         var shipIsValid = true;
@@ -116,15 +116,15 @@ autoIncrement.initialize(mongoose.connection);
         }
 
         for(var shipIndex = 0; shipIndex < ship.length; shipIndex++){
-          
+
           //We only wanna check for more validation errors if the ship is still valid
           if(shipIsValid){
-             //Check if X is in bounds 
+             //Check if X is in bounds
             if(!_.contains(xAxis, coord.x)){
-              shipIsValid = false; 
+              shipIsValid = false;
               shipValidations.push("The ship '" + ship.name + "' is horizontally out of bounds (x)")
             }
-            
+
             //check if Y is in bounds
             if(!_.contains(yAxis, coord.y)){
               shipIsValid = false; //We only want 1 validation per ship
@@ -137,7 +137,7 @@ autoIncrement.initialize(mongoose.connection);
               shipValidations.push("The ship '" + ship.name + "' has an overlap with another ship")
             }
           }
-         
+
           coveredCells.push({x: coord.x, y: coord.y});
           coord = getNextCoord(coord, ship.isVertical);
         }
@@ -150,7 +150,7 @@ autoIncrement.initialize(mongoose.connection);
 
   function getNextCoord(coord, isVertical){
     if(isVertical){
-      coord.y++;  
+      coord.y++;
     }else{
       coord.x = String.fromCharCode(coord.x.charCodeAt(0) + 1)
     }

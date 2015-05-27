@@ -3,14 +3,14 @@
 	<h1><span class="fa fa-sign-in"></span>Docs</h1>
 
 	<section class="" id="APIKEY" data-spy="APIKEY" data-target="#APIKEY">
-		
+
 		<h3>De API Key</h3>
 
 		<p>
-			Het is alleen mogelijk om data van de server op te halen door aan elk request een API key toe te voegen. 
-			Deze key vertelt de server iets over wie je bent. 
-			Je kunt deze key aanvragen op deze website door je zelf te registreren. 
-			Op de <a href="/profile">profile</a> pagina kun je deze key terug vinden. 
+			Het is alleen mogelijk om data van de server op te halen door aan elk request een API key toe te voegen.
+			Deze key vertelt de server iets over wie je bent.
+			Je kunt deze key aanvragen op deze website door je zelf te registreren.
+			Op de <a href="/profile">profile</a> pagina kun je deze key terug vinden.
 		</p>
 
 		<p>
@@ -18,7 +18,7 @@
 			Klik bijvoorbeeld maar eens op de onderstaande link.
 		</p>
 
-		{{#if user.local.email }} 
+		{{#if user.local.email }}
 			<p>
 				<a href="/users/me/games?token={{user.local.token}}" target="blank">/users/me/games?token={{user.local.token}}</a>
 			</p>
@@ -31,25 +31,25 @@
 
 		<p>Vergeet deze token niet mee te geven anders krijg je een error!</p>
 
-		
 
-	
+
+
 	</section>
 	<section class="" id="spelregels" data-spy="spelregels" data-target="#spelregels">
-		
+
 		<h3>Spelregels</h3>
 
 		<p>
 			Zeeslag is een spel met maar een basis set aan spel regels.
-			Het model wat we gaan gebruiken om informatie op te halen en op te slaan is ook niet heel er ingewikkeld. 
+			Het model wat we gaan gebruiken om informatie op te halen en op te slaan is ook niet heel er ingewikkeld.
 		</p>
 
 		<p>
-			Het doel van zeeslag is het laten <b>zinken</b> van alle schepen van de tegenstander. De schepen bevinden zich op een Grid van <b>10x10</b> vakjes. Bij het opzetten (setup) van het spel moeten de beiden spelers de schepen op het bord plaatsen. In de digitale vorm heeft elk schip een start vakje, lengte en oriëntatie (Verticaal of horizontaal). 
+			Het doel van zeeslag is het laten <b>zinken</b> van alle schepen van de tegenstander. De schepen bevinden zich op een Grid van <b>10x10</b> vakjes. Bij het opzetten (setup) van het spel moeten de beiden spelers de schepen op het bord plaatsen. In de digitale vorm heeft elk schip een start vakje, lengte en oriëntatie (Verticaal of horizontaal).
 		</p>
 
 		<p>
-			Als beide spelers klaar zijn kan het spel beginnen. (started) Elke speler kan een vakje van de tegenstander <b>beschieten</b>. De tegenstander moet dan aangeven of het een <b>BOEM</b> of een <b>PLONS</b> is. Beiden spelers kunnen bijhouden welke schoten ze hebben uitgevoerd en of het schot raak was of niet. 
+			Als beide spelers klaar zijn kan het spel beginnen. (started) Elke speler kan een vakje van de tegenstander <b>beschieten</b>. De tegenstander moet dan aangeven of het een <b>BOEM</b> of een <b>PLONS</b> is. Beiden spelers kunnen bijhouden welke schoten ze hebben uitgevoerd en of het schot raak was of niet.
 		</p>
 
 		<p>
@@ -78,7 +78,7 @@
 
 	</section>
 	<section class="" id="megames" data-spy="megames" data-target="#megames">
-		
+
 		<h3>/users/me/games</h3>
 
 		<p class="bg-success">GET</p>
@@ -95,20 +95,20 @@
 
 <pre>
 [
-  { 
+  {
   	"_id":21,"status":"setup",
   	"enemyId":"55268f3aa43c82a4244bb00c",
-  	"enemyName":"rechtsonder@gmail.com 
+  	"enemyName":"rechtsonder@gmail.com
   },
   {"
   	_id":19,"status":"started",
    "enemyId":"55268f3aa43c82a4244bb00a"
-   ,"enemyName":"rechtsboven@gmail.com" 
+   ,"enemyName":"rechtsboven@gmail.com"
   },
   {
   	"_id":22,"status":"started",
   	"enemyId":"55268f3aa43c82a4244bb00a",
-  	"enemyName":"rechtsboven@gmail.com" 
+  	"enemyName":"rechtsboven@gmail.com"
   },
   {
   	"_id":23,"status":"started",
@@ -119,7 +119,7 @@
 
 	</section>
 	<section class="" id="newGame" data-spy="newGame" data-target="#newGame">
-		
+
 		<h3>/games</h3>
 
 		<p class="bg-success">GET</p>
@@ -133,7 +133,7 @@
 		<pre>
 {
     "_id": 9,
-    "status": "setup | que", 
+    "status": "setup | que",
     "player1": "<player1Id>",
     "player2": "<player2Id> | undefined",
     "__v": 0,
@@ -144,7 +144,7 @@
 
 	</section>
 	<section class="" id="newGameAI" data-spy="newGameAI" data-target="#newGameAI">
-		
+
 		<h3>/games/AI</h3>
 
 		<p class="bg-success">GET</p>
@@ -167,13 +167,13 @@
 
 	</section>
 	<section class="" id="theGame" data-spy="theGame" data-target="#theGame">
-		
+
 		<h3>/games/:id</h3>
 
 		<p class="bg-success">GET</p>
 
 		<p>
-			Elke gebruiker heeft een collectie van <b>games</b>. Voor elke game kun je alle informatie opvragen doormiddel van het Id. Het is alleen mogelijk gegevens op te halen van een game waar je zelf aan deel neemt. 
+			Elke gebruiker heeft een collectie van <b>games</b>. Voor elke game kun je alle informatie opvragen doormiddel van het Id. Het is alleen mogelijk gegevens op te halen van een game waar je zelf aan deel neemt.
 		</p>
 
 		<p>
@@ -181,7 +181,7 @@
 		</p>
 
 
-		{{#if user.local.email }} 
+		{{#if user.local.email }}
 			<p>
 				<a href="/games/7?token={{user.local.token}}" target="blank">/games/7?token={{user.local.token}}</a>
 			</p>
@@ -244,16 +244,16 @@
 
 	</section>
 	<section class="" id="ships" data-spy="ships" data-target="#ships">
-		
+
 		<h3>/ships</h3>
 
 
 		<p class="bg-success">GET</p>
 
 		<p>
-		Haal een lijst op van schepen die je op een gameboard kan plaatsen. 
-		De lijst bevat 5 schepen (2, 3 , 3, 4, 5) waarmee je je gameboard kunt vullen. 
-		Na het vullen van het gameboard kun je dit 'posten' naar de server. 
+		Haal een lijst op van schepen die je op een gameboard kan plaatsen.
+		De lijst bevat 5 schepen (2, 3 , 3, 4, 5) waarmee je je gameboard kunt vullen.
+		Na het vullen van het gameboard kun je dit 'posten' naar de server.
 		</p>
 
 		<h4>Return value</h4>
@@ -298,7 +298,7 @@
 	</section>
 
 	<section class="" id="gameboards" data-spy="gameboards" data-target="#gameboards">
-		
+
 		<h3>/games/:id/gameboards</h3>
 
 		<p class="bg-danger">POST</p>
@@ -316,7 +316,7 @@
 		</p>
 
 		<p class="bg-info">
-			<b>Tip</b> - Gebruik de result set van de recourse <b>/ships</b> om een lijst van schepen te maken. 
+			<b>Tip</b> - Gebruik de result set van de recourse <b>/ships</b> om een lijst van schepen te maken.
 			Voeg per 'ship' de volgende properties toe:
 			<ul>
 				<li>Een JSON object met de naam startCell <i>(bijv: {x: 'a', y: 6})</i></li>
@@ -328,7 +328,7 @@
 			<ul>
 				<li>Een Lijst van schepen</li>
 			</ul>
-		</p>	
+		</p>
 
 		<h4>Post object</h4>
 
@@ -375,7 +375,7 @@
     }]
 }
 </pre>
-	
+
 		<h4>Return value</h4>
 
 <pre>
@@ -388,15 +388,15 @@
 
 	</section>
 	<section class="" id="shots" data-spy="shots" data-target="#shots">
-		
+
 		<h3>/games/:gameId/shots</h3>
 
 
 		<p class="bg-danger">POST</p>
 
 		<p>
-			Indien een game de status 'started' heeft, is het mogelijk om echt te gaan spelen. 
-			Elke speler kan omstebeurt een schot toevoegen aan het gameboard van de tegenstander. 
+			Indien een game de status 'started' heeft, is het mogelijk om echt te gaan spelen.
+			Elke speler kan omstebeurt een schot toevoegen aan het gameboard van de tegenstander.
 			Dit doet hij door op de route /games/:gameId/shots een schot te posten. De server zal de schoten bijhouden op het gameboard van de betrokken partij. Een schot op je enemey, voegt een schot toe aan het gameboard van je de enemy.
 		</p>
 
@@ -409,7 +409,7 @@
 		</p>
 
 		<p>
-			De return value van deze resource is anders dan de meeste resources. 
+			De return value van deze resource is anders dan de meeste resources.
 			Eventuele errors daargelaten, is het mogelijk om 3 responses te krijgen van de server:
 			<ul>
 				<li><b>BOOM</b>: Het schot was raak</li>
@@ -419,9 +419,9 @@
 		</p>
 
 		<p>
-			Indien een schot raak is, zal de server naast een shot aan het gameboard, ook een hit aan het schip toevoegen. 
+			Indien een schot raak is, zal de server naast een shot aan het gameboard, ook een hit aan het schip toevoegen.
 			Hierdoor is het makkelijk te zien of een van je schepen al geraakt is, zonder door alle schoten heen te lopen.
-			Daarnaast krijgt elk schot een property 'isHit' met de waarde 'true'. Hierdoor kun je later terug zien welke schoten op het vijandelijk bord raak waren. 
+			Daarnaast krijgt elk schot een property 'isHit' met de waarde 'true'. Hierdoor kun je later terug zien welke schoten op het vijandelijk bord raak waren.
 		</p>
 
 
@@ -430,7 +430,7 @@
 		<pre>
 	{"x": "a", "y": 1 }
 </pre>
-	
+
 		<h4>Return value</h4>
 		<pre>
 	BOOM | SPLASH | FAIL
@@ -465,6 +465,6 @@
    			</ul>
    		</li>
 
-      
+
     </ul>
 </div>

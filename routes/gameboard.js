@@ -46,11 +46,11 @@ router.route('/games/:id/gameboards')
 							var gameboard = new Gameboard();
 							var ships = req.body.ships;
 
-							//Voor de zekerheid nemen we alleen de velden over van ship die nodig zijn 
+							//Voor de zekerheid nemen we alleen de velden over van ship die nodig zijn
 							for(var i = 0; i < ships.length; i++){
 								var ship = {
 									startCell: ships[i].startCell,
-									name: ships[i].name, 
+									name: ships[i].name,
 									isVertical: ships[i].isVertical,
 									length: ships[i].length,
 								};
@@ -61,13 +61,13 @@ router.route('/games/:id/gameboards')
 
 							if(validationErrors.length != 0){
 								return res.json({
-									msg: "Error: The gameboard contains validation errors", 
+									msg: "Error: The gameboard contains validation errors",
 									validationErrors: validationErrors
 								});
 							}
-							
+
 							gameboard.save(function(err, gameboard){
-									
+
 								//check for errors
 								if(err){res.json(err);}
 								else{
@@ -87,7 +87,7 @@ router.route('/games/:id/gameboards')
 								}
 							});
 						}
-					});	
+					});
 
 				}
 				else
@@ -108,7 +108,7 @@ function SetGameboardsToGame(req, res, game, gameboard, gameboardAI){
 	if(gameboardAI){
 		game.board2 = gameboardAI._id;
 	}
-		
+
 	//Are both gameboards posted? Then we can start
 	if(game.board1 && game.board2){
 		game.start();
@@ -122,17 +122,17 @@ function SetGameboardsToGame(req, res, game, gameboard, gameboardAI){
 }
 
 
-/** 
+/**
 --------  ALl the routes to  /gameboards/:id/shots --------------
 All the routes for the gameboard it's hits
 Return values: Error, SPLASH, BOOM and fail
 Error: Wrong URL or JSON
 SPLASH: shot added to the board, but no ship hit
-BOOM: shot added to the board and to the hit of the ship 
+BOOM: shot added to the board and to the hit of the ship
 FAIL: trying to add a shot that already excists
 **/
 router.route('/games/:id/shots')
-	
+
 	.post(token.validate, function(req, res, next){
 
 		var gameId = req.params.id;
@@ -180,7 +180,7 @@ router.route('/games/:id/shots')
 							var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
 
 							gameboard.save(function(err, gameboard){
-										
+
 								var enemyId = req.user._id.equals(game.player1) ? game.player2 : game.player1;
 								game.turn = enemyId;
 								var response = "SPLASH";
@@ -191,7 +191,7 @@ router.route('/games/:id/shots')
 									if(gameboard.areAllShipsHit())
 									{
 										game.status = Game.schema.status.done;
-										game.winner = req.user._id; 
+										game.winner = req.user._id;
 										response = "WINNER";
 									}
 									else
@@ -199,7 +199,7 @@ router.route('/games/:id/shots')
 										response = "BOOM";
 									}
 								}
-								
+
 								game.save(function(err, game){
 									if(game.isAI){
 										req.result = response;
@@ -231,7 +231,7 @@ router.route('/games/:id/shots')
 		//If we reach this code, it's the turn of the AI to hit the board1 of the game
 		Gameboard.findById(game.board1, function(err, gameboard){
 
-			var shotFound = true;	
+			var shotFound = true;
 			while(shotFound){
 				pShot = RandomShot();
 				shotFound = _.findWhere(gameboard.shots, pShot);
@@ -247,7 +247,7 @@ router.route('/games/:id/shots')
 					game.status = Game.schema.status.done;
 					game.winner = game.player2; //The computer won the game omg!
 				}
-							
+
 				game.turn = req.user._id;
 				game.save(function(err, game){
 					res.send(req.result);
@@ -263,5 +263,5 @@ function RandomShot(){
 	return {x: x, y: y};
 }
 
-		
+
 module.exports = router;

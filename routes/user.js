@@ -31,7 +31,7 @@ router.route('/me/games')
 					if(game.player1._id.equals(req.user._id))
 					 	enemy = game.player2; //if player 1 is not current player
 
-					item.enemyId = enemy._id; 
+					item.enemyId = enemy._id;
 					item.enemyName = enemy.local.email;
 				}
 
@@ -39,7 +39,7 @@ router.route('/me/games')
 			});
 
 			res.json(result);//Send it away!
-			
+
 		});
 	});
 
