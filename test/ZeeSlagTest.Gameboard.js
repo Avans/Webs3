@@ -27,6 +27,19 @@ module.exports = function(app, Game, Gameboard, gToken, gUserId){
 				});
 		});
 
+		it('should not accept malformed ships array', function(done) {
+
+			var post = {'ships': [ships_array[0]]};
+
+			request(app)
+				.post('/games/1/gameboards?token=' + gToken)
+				.send(post)
+				.end(function(err, res) {
+					expect(res.text).to.equal('{"msg":"Error: The gameboard contains validation errors","validationErrors":["The collection of ships does not contain 5 ships."]}');
+					done(null, res);
+				});
+		});
+
 		it('should POST return success', function(done){
 
 			var post = {'ships': ships_array};
