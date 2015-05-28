@@ -33,15 +33,14 @@ module.exports = function(app, Game, User, gToken, gUserId){
 						player1: gUserId,
 						player2: "552675ef7aa073c044cdc274",
 						board1: 4,
-						status: Game.schema.status.que
+						status: Game.schema.status.setup
 					});
 					game2.save(function(){cb();});
 				},
 				function(cb){
 					var game3 = new Game({
-						_id: 2,
+						_id: 3,
 						player2: "552675ef7aa073c044cdc274",
-						board1: 4,
 						status: Game.schema.status.que
 					});
 					game3.save(function(){cb();});
@@ -61,6 +60,25 @@ module.exports = function(app, Game, User, gToken, gUserId){
 
 					done();
 				});
+		});
+
+
+		it('should DELETE return "success" and vemove all games from that player', function(done){
+
+			request(app)
+				.delete('/users/me/games?token=' + gToken)
+				.expect(200)
+				.end(function(err, res){
+					if(err){ return done(err); }
+
+					res.body.msg.should.be.eql('Games removed succesfully');
+
+					Game.find(function(err, games){
+						games.should.have.length(1);
+						done();
+					});
+				});
+
 		});
 	});
 }

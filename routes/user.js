@@ -41,6 +41,17 @@ router.route('/me/games')
 			res.json(result);//Send it away!
 
 		});
+	})
+
+	.delete(token.validate, function(req, res){
+		Game.myGames(req.user._id, function(err, games){
+			games.forEach(function(game){
+				game.remove();
+			});
+			
+			res.json({msg: "Games removed succesfully"});
+		});
 	});
+
 
 module.exports = router;

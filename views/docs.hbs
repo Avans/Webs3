@@ -27,7 +27,7 @@
 		{{/if}}
 		<p>Door achter de de <b>route</b> een parameter met de naam <b>token</b> te zetten kun je de API key meegeven.</p>
 
-		<pre>/users/my/games?token=&lt&lttoken here&gt&gt</pre>
+		<pre>/users/me/games?token=&lt&lttoken here&gt&gt</pre>
 
 		<p>Vergeet deze token niet mee te geven anders krijg je een error!</p>
 
@@ -116,6 +116,23 @@
   	"enemyName":"rechtsboven@gmail.com"
   }
 ]</pre>
+
+	</section>
+	<section class="" id="megamesdelete" data-spy="megamesdelete" data-target="#megamesdelete">
+
+		<h3>/users/me/games</h3>
+
+		<p class="bg-warning">DELETE</p>
+
+		<p>
+			Via deze route is het mogelijk alle games waar je deel aan neemt te verwijderen. De request hoeft verder geen body te hebben. 
+		</p>
+
+		<h4>Return value</h4>
+<pre>
+  {
+  	"msg": "Games removed succesfully"
+  }</pre>
 
 	</section>
 	<section class="" id="newGame" data-spy="newGame" data-target="#newGame">
@@ -456,6 +473,7 @@
    		<li>Routes
    			<ul class="nav nav-list">
    				<li><a href="#megames">/users/me/games</a></li>
+   				<li><a href="#megamesdelete">/users/me/games</a></li>
    				<li><a href="#newGame">/games</a></li>
    				<li><a href="#newGameAI">/games/AI</a></li>
    				<li><a href="#theGame">/games/:id</a></li>

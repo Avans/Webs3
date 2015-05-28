@@ -18,8 +18,6 @@ module.exports = function(passport) {
     passport.use('bearer', new BearerStrategy(
       function(token, done) {
 
-        console.log("passport.js " + token);
-
         User.findOne({ token: token }, function (err, user) {
           if (err) { return done(err); }
           if (!user) { return done(null, false); }

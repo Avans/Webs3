@@ -65,4 +65,5 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				});
 		});
 	});
+
 }

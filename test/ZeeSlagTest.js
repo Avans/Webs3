@@ -91,11 +91,11 @@ describe('Test that depend on routes', function(){
 				},
 				function(cb){
 					var user = new User({ _id: gUserId, local: {token: gToken, email: "test@mail.com" }});
-					user.save(function(err, user){console.log(err);cb();});
+					user.save(function(err, user){cb();});
 				},
 				function(cb){
 					var enemy = new User({ _id: "552675ef7aa073c044cdc274", local: {token: "def", email: "enemy@mail.com" }});
-					enemy.save(function(err, user){console.log(err);cb();});
+					enemy.save(function(err, user){cb();});
 				},
 			], function(){done();});
 
