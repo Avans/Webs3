@@ -4,6 +4,11 @@ function GameController(){
 	//Properties
 	self.games = [];
 
+	socket.on('update', function(gameId){
+		if(app.game._id == gameId)
+			app.gameController.refreshGame();
+	});
+
 	//Methods
 	self.getAllGames = function(){
 		AjaxHelper.GET("users/me/games", {
@@ -15,6 +20,7 @@ function GameController(){
 	}
 
 	self.selectGame = function(id){
+
 
 		AjaxHelper.GET("games/" + id, {
 			success: function(game){

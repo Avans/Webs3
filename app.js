@@ -10,16 +10,18 @@ var passport = require('passport');
 var expressHbs = require('express3-handlebars');
 var flash  = require('connect-flash');
 
-//Require models and routes and configs
-require('./model/gameboard');
-require('./model/game');
-require('./model/user');
 
 var dbConfig = require('./config/database');
 var passConfig = require('./config/passport')(passport);
 mongoose.connect(dbConfig.url);
 
 var app = express();
+
+//Require models and routes and configs
+require('./model/gameboard');
+require('./model/game');
+require('./model/user');
+
 
 //View Engine
 app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
@@ -50,11 +52,12 @@ app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //passport
 app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
 app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
+app.use(passport.session()); // persistent login sessiNons
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 //Route all the routes!
@@ -64,10 +67,11 @@ var user = require('./routes/user');
 var ship = require('./routes/ships');
 var index = require("./routes/index")(app, passport);
 
-app.use('/games', game);
+
 app.use('/', gameboard); //Starts @ root
 app.use('/users', user);
 app.use('/ships', ship);
+app.use('/games', game);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

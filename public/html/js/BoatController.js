@@ -9,7 +9,6 @@ function BoatController(){
 		AjaxHelper.GET("ships", {
 			success: function(ships){
 
-				debugger;
 				for(var i = 0; i < ships.length; i++){
 					var ship = ships[i];
 					ship.isVertical = true;
