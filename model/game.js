@@ -2,7 +2,7 @@
   var mongoose = require('mongoose');
   var Schema = mongoose.Schema;
   var Gameboard = mongoose.model("Gameboard");
-    var io = require('socket.io')(80);
+  var io = require('socket.io')();
 
   var autoIncrement = require('mongoose-auto-increment');
   autoIncrement.initialize(mongoose.connection);
