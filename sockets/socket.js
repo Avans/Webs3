@@ -27,7 +27,7 @@ function sendUpdate(gameId){
     if(io){
         io.to(gameId).emit("update", gameId);
     } else{
-        throw "IO is not initialized yet. Initialize it with HTTP";
+        console.log("IO is not initialized yet. Initialize it with HTTP") ;
     }
 }
  
