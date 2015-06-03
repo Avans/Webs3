@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "test": "istanbul cover node_modules/mocha/bin/_mocha -- -u exports -R spec"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "*",
     "serve-favicon": "~2.2.0",
+    "socket.io": "^1.3.5",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

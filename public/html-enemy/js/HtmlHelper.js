@@ -36,7 +36,7 @@ var HtmlHelper = {
 
 			$("<li><button class='rotate'></button>  <label></label> <span class='coords'></span><span class='badge'></span></li>")
 				.addClass("list-group-item boatItem")
-				.attr("id", "boat_" + boat.id)
+				.attr("id", "boat_" + boat._id)
 				.find("label")
 					.text(boat.name)
 					.end()
@@ -44,7 +44,7 @@ var HtmlHelper = {
 					.text(coords)
 					.end()
 				.find("button")
-					.attr("id", "boat_" + boat.id)
+					.attr("id", "boat_" + boat._id)
 					.text(isVertical)
 					.end()
 				.find(".badge")

@@ -10,16 +10,18 @@ var passport = require('passport');
 var expressHbs = require('express3-handlebars');
 var flash  = require('connect-flash');
 
-//Require models and routes and configs
-require('./model/gameboard');
-require('./model/game');
-require('./model/user');
 
 var dbConfig = require('./config/database');
 var passConfig = require('./config/passport')(passport);
 mongoose.connect(dbConfig.url);
 
 var app = express();
+
+//Require models and routes and configs
+require('./model/gameboard');
+require('./model/game');
+require('./model/user');
+
 
 //View Engine
 app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
