@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var Game = mongoose.model('Game');
 var User = mongoose.model('User');
 
-
 function initIo(){
     
     io.sockets.on('connection', function (socket) {
@@ -26,16 +25,18 @@ function initIo(){
  
 function sendUpdate(gameId){
     if(io){
-
         io.to(gameId).emit("update", gameId);
     } else{
         throw "IO is not initialized yet. Initialize it with HTTP";
     }
 }
  
-module.exports = function(http){
-    if(!io && http){
-        io = require('socket.io').listen(http);
+module.exports = function(server){
+
+    console.log('wwhooo');
+    
+    if(!io && server){
+        io = require('socket.io')(server);
         initIo();
     }
  

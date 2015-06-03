@@ -9,11 +9,6 @@ var token = require('../modules/tokenModule');
 var io = require('../sockets/socket')();
 
 
-
-module.exports = function(app){
-
-
-
 	function validateHit(hit)
 	{
 		if(!Object.keys(hit).length) { return "No data in Ajax request"; }
@@ -279,5 +274,7 @@ module.exports = function(app){
 		var x = possible.charAt(Math.floor(Math.random() * possible.length));
 		return {x: x, y: y};
 	}
-	return router; 
-}
+
+module.exports = router;
+
+

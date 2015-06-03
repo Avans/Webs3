@@ -1,4 +1,4 @@
-module.exports = function(){
+
   var mongoose = require('mongoose');
   var Schema = mongoose.Schema;
   var Gameboard = mongoose.model("Gameboard");
@@ -144,6 +144,4 @@ module.exports = function(){
   }
 
 
-  mongoose.model('Game', gameSchema);
-}
-
+mongoose.model('Game', gameSchema);
