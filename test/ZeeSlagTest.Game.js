@@ -48,6 +48,21 @@ module.exports = function(app, Game, User, gToken, gUserId){
 
 	describe('On Path /games:/1', function(){
 
+		it('should GET return error on non-existent game', function(done){
+
+			request(app)
+				.get('/games/7834?token=' + gToken)
+				.expect(200)
+				.end(function(err, res){
+
+					if(err){ return done(err); }
+
+					expect(res.text).to.equal('{"msg":"Error: No game found with id 7834"}');
+
+					done(null, res);
+				});
+		});
+
 		it('should GET return 1 game with filled gameboards', function(done){
 
 			request(app)

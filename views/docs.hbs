@@ -99,7 +99,7 @@
   	"_id":21,"status":"setup",
   	"enemyId":"55268f3aa43c82a4244bb00c",
   	"enemyName":"rechtsonder@gmail.com
-  },
+  },re
   {"
   	_id":19,"status":"started",
    "enemyId":"55268f3aa43c82a4244bb00a"
@@ -333,7 +333,7 @@
 		</p>
 
 		<p class="bg-info">
-			<b>Tip</b> - Gebruik de result set van de recourse <b>/ships</b> om een lijst van schepen te maken.
+			<b>Tip</b> - Gebruik de result set van de resourse <b>/ships</b> om een lijst van schepen te maken.
 			Voeg per 'ship' de volgende properties toe:
 			<ul>
 				<li>Een JSON object met de naam startCell <i>(bijv: {x: 'a', y: 6})</i></li>
@@ -348,6 +348,8 @@
 		</p>
 
 		<h4>Post object</h4>
+		
+		<p>Gebruik <i>geen</i> JSON.stringify op dit object als je het via AJAX verstuurrd.</p>
 
 		<pre>
 { "ships": [{
