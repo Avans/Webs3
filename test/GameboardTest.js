@@ -212,5 +212,16 @@ describe('Test that depend on model Gameboard', function(){
 			expect(result[0]).to.equal("The ship 'd' has an incorrect size of 4");
 			done();
 		});
+
+		it('isValid returns 1 error on missing startCell', function(done) {
+			defaultShips.push({name: 'd', isVertical: false, length: 4});
+
+			var gameboard = new Gameboard({ships: defaultShips});
+
+			var result = gameboard.isValid();
+			expect(result.length).to.equal(1);
+			expect(result[0]).to.equal("The ship 'd' does not have a startCell property");
+			done();
+		})
 	});
 });

@@ -105,6 +105,12 @@ autoIncrement.initialize(mongoose.connection);
     for(var index = 0; index < 5; index++){
 
         var ship = this.ships[index];
+
+        if(ship.startCell.x === undefined) {
+          shipValidations.push("The ship '" + ship.name + "' does not have a startCell property");
+          continue;
+        }
+
         var coord = {x: ship.startCell.x, y: ship.startCell.y};
         var shipIsValid = true;
 
