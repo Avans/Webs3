@@ -107,7 +107,22 @@ autoIncrement.initialize(mongoose.connection);
         var ship = this.ships[index];
 
         if(ship.startCell.x === undefined) {
-          shipValidations.push("The ship '" + ship.name + "' does not have a startCell property");
+          shipValidations.push("The ship '" + ship.name + "' is missing x coordinate");
+          continue;
+        }
+
+        if(ship.startCell.y === undefined) {
+          shipValidations.push("The ship '" + ship.name + "' is missing y coordinate");
+          continue;
+        }
+
+        if(ship.length === undefined) {
+          shipValidations.push("Ship '" + ship.name + "' is missing length");
+          continue;
+        }
+
+        if(ship.name === undefined) {
+          shipValidations.push("Ship of length " + ship.length + " is missing a name");
           continue;
         }
 

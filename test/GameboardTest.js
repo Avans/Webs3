@@ -213,15 +213,51 @@ describe('Test that depend on model Gameboard', function(){
 			done();
 		});
 
-		it('isValid returns 1 error on missing startCell', function(done) {
+		it('isValid returns 1 error on missing x coordinate', function(done) {
 			defaultShips.push({name: 'd', isVertical: false, length: 5});
 
 			var gameboard = new Gameboard({ships: defaultShips});
 
 			var result = gameboard.isValid();
 			expect(result.length).to.equal(1);
-			expect(result[0]).to.equal("The ship 'd' does not have a startCell property");
+			expect(result[0]).to.equal("The ship 'd' is missing x coordinate");
 			done();
-		})
+		});
+
+		it('isValid returns 1 error on missing y coordinate', function(done){
+
+			defaultShips.push({name: 'd', isVertical: false, length: 5, startCell: {x: 'a'}});
+
+			var gameboard = new Gameboard({ships: defaultShips});
+
+			var result = gameboard.isValid();
+			expect(result.length).to.equal(1);
+			expect(result[0]).to.equal("The ship 'd' is missing y coordinate");
+			done();
+		});
+
+		it('isValid returns 1 error on missing length', function(done){
+
+			defaultShips.push({name: 'd', isVertical: false, startCell: {x: 'a', y: 1}});
+
+			var gameboard = new Gameboard({ships: defaultShips});
+
+			var result = gameboard.isValid();
+			expect(result.length).to.equal(1);
+			expect(result[0]).to.equal("Ship 'd' is missing length");
+			done();
+		});
+
+		it('isValid returns 1 error on missing name', function(done){
+
+			defaultShips.push({isVertical: false, length: 5, startCell: {x: 'a', y: 1}});
+
+			var gameboard = new Gameboard({ships: defaultShips});
+
+			var result = gameboard.isValid();
+			expect(result.length).to.equal(1);
+			expect(result[0]).to.equal("Ship of length 5 is missing a name");
+			done();
+		});
 	});
 });
