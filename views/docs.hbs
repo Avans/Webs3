@@ -456,9 +456,60 @@
 </pre>
 
 	</section>
+	<section class="" id="sockets" data-spy="sockets" data-target="#sockets">
 
+		<h3>Sockets</h3>
 
+		<p class="bg-info">Socket connection</p>
 
+		<p>Het is mogelijk om een connectie met een websocket op de zeeslag server te maken.
+		Via deze socket worden er berichten verstuurd op het momoent dat een game waar jij actief in bent een update doorgaat.</p>
+
+		<p>Op deze manier kun je zien of een andere speler een gameboard upload of een shot toevoegt aan een game. </p>
+
+		<p>Om deze functionaliteit te implementeren moet je de volgende handelingen uitvoeren:
+			<ol>
+				<li>Een socket.io Javascript file toevoegen</li>
+				<li>Verbinding maken met de socket op de webserver</li>
+				<li>Luisteren naar de berichtent die de server verstuurd</li>
+			</ol>
+		</p>
+
+		<h4>De javascript file toevoegen</h4>
+
+		<p>Op de zeeslag server bevind zich een file genaamd <b>socket.io.js</b>.
+			Deze file is op de volgende manier te benaderen
+		</p>
+
+		<pre>&ltscript src="https://zeeslagavans.herokuapp.com/socket.io/socket.io.js"&gt&lt/script&gt
+</pre>
+
+		<h4>Verbniding maken met de socket</h4>
+
+		<p>Als de file is toevegoed kun je een <b>socket</b> object defineren. </p>
+
+		<pre>
+var server = 'https://zeeslagavans.herokuapp.com/';
+var options = {
+  query: "token=" +  &lt&ltTOKEN&gt&gt,
+};
+
+var socket = io.connect(server, options);
+</pre>
+
+		<h4>Luisteren naar berichten</h4>
+
+		<p>Indien de server ziet dat een game waar jij onderdeel van bent een update heeft, zal hij een berichtje met de naam <b>'update'</b> versturen.
+		Als parameter krijg je het ID van de game die veranderd is mee (<b>gameId</b>). 
+		</p>
+
+		<pre>
+socket.on('update', function(gameId){
+  	
+});
+</pre>
+
+	</section>
 
 </div>
 
@@ -482,6 +533,11 @@
    				<li><a href="#ships">/ships</a></li>
    				<li><a href="#gameboards">/games/:id/gameboards</a></li>
    				<li><a href="#shots">/games/:id/shots</a></li>
+   			</ul>
+   		</li>
+   		<li>Sockets
+   			<ul class="nav nav-list">
+   				<li><a href="#sockets">Listening to a socket</a></li>
    			</ul>
    		</li>
 
