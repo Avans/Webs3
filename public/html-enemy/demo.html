@@ -98,14 +98,13 @@
 	<script src="js/GameController.js"></script>
 	<script src="js/BoatController.js"></script>
 	<script src="js/GameboardController.js"></script>
-	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+	<script src="http://zeeslagavanstest.herokuapp.com/socket.io/socket.io.js"></script>
 			<script>	
-
-			  	var socket = io.connect('http://localhost:3000/', {query: 'token=' + AjaxHelper.token }  );
-
-			  	socket.on('update', function(data){
-			  		console.log(data);
-			  	});
+				var server = 'http://zeeslagavanstest.herokuapp.com/';
+				var options = {
+					query: "token=" + AjaxHelper.token,
+				};
+			  	var socket = io.connect(server, options);
 
 			</script>
 	<script src="js/app.js"></script>
