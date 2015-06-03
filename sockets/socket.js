@@ -31,12 +31,10 @@ function sendUpdate(gameId){
     }
 }
  
-module.exports = function(server){
-
-    console.log('wwhooo');
+module.exports = function(http){
     
-    if(!io && server){
-        io = require('socket.io')(server);
+    if(!io && http){
+        io = require('socket.io').listen(http);
         initIo();
     }
  
