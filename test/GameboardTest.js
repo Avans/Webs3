@@ -214,7 +214,7 @@ describe('Test that depend on model Gameboard', function(){
 		});
 
 		it('isValid returns 1 error on missing startCell', function(done) {
-			defaultShips.push({name: 'd', isVertical: false, length: 4});
+			defaultShips.push({name: 'd', isVertical: false, length: 5});
 
 			var gameboard = new Gameboard({ships: defaultShips});
 
