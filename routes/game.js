@@ -75,7 +75,7 @@ router.route('/AI')
 		Game.findById(req.params.id)
 			.exec(function(err, game){
 				if(!game)
-					return res.json({msg: "Error: No game found with id " + gameId});
+					return res.json({msg: "Error: No game found with id " + req.params.id});
 				else{
 
 					if(game.containsPlayer(userId))
