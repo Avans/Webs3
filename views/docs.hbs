@@ -463,7 +463,8 @@
 		<p class="bg-info">Socket connection</p>
 
 		<p>Het is mogelijk om een connectie met een websocket op de zeeslag server te maken.
-		Via deze socket worden er berichten verstuurd op het momoent dat een game waar jij actief in bent een update doorgaat.</p>
+		Via deze socket worden er berichten verstuurd vanuit de server. Indien een van je tegenstanders een actie uitvoert via de server, zal de server een bericht sturen
+		welke game geupdate is. </p>
 
 		<p>Op deze manier kun je zien of een andere speler een gameboard upload of een shot toevoegt aan een game. </p>
 
@@ -475,6 +476,10 @@
 			</ol>
 		</p>
 
+		</br>
+
+		<hr />
+
 		<h4>De javascript file toevoegen</h4>
 
 		<p>Op de zeeslag server bevind zich een file genaamd <b>socket.io.js</b>.
@@ -482,9 +487,9 @@
 		</p>
 
 		<pre>&ltscript src="https://zeeslagavans.herokuapp.com/socket.io/socket.io.js"&gt&lt/script&gt
-</pre>
+</pre> </br>
 
-		<h4>Verbniding maken met de socket</h4>
+		<h4>Verbinding maken met de socket</h4>
 
 		<p>Als de file is toevegoed kun je een <b>socket</b> object defineren. </p>
 
@@ -495,7 +500,7 @@ var options = {
 };
 
 var socket = io.connect(server, options);
-</pre>
+</pre></br>
 
 		<h4>Luisteren naar berichten</h4>
 
@@ -507,7 +512,7 @@ var socket = io.connect(server, options);
 socket.on('update', function(gameId){
   	
 });
-</pre>
+</pre></br>
 
 	</section>
 
