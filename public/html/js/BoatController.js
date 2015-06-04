@@ -1,7 +1,7 @@
 function BoatController(){
 	var self = this;
 
-	//Propertie
+	//Properties
 	self.selectedBoat = null;
 	self.boats = [];
 
