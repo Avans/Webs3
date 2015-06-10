@@ -251,8 +251,6 @@ var io = require('../sockets/socket')();
 
 				var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
 
-
-
 				gameboard.save(function(err, gameboard){
 
 					if(gameboard.areAllShipsHit()){
@@ -271,7 +269,7 @@ var io = require('../sockets/socket')();
 	function RandomShot(){
 		var possible = "abcdefghij";
 		var y = Math.floor(Math.random() * 9) + 1;
-		var x = possible.charAt(Math.floor(Math.random() * possible.length));
+		var x = possible.charAt(Math.round(Math.random() * possible.length));
 		return {x: x, y: y};
 	}
 
