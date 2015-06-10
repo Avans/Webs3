@@ -86,40 +86,44 @@ router.route('/AI')
 			 				yourTurn:  req.user._id.equals(game.turn),
 			 				youWon: req.user._id.equals(game.winner)
 			 			};
-
-			 			if(game.status != "que")
-			 			{
-			 				var enemyId = game.player1;
-			 				if(game.player1.equals(req.user._id))
-			 					enemyId = game.player2;
-
-			 				//Get the user element of the enemy player
-			 				User.findById(enemyId, function(err, enemy){
-
-				 				result.enemyId = enemy._id;
-				 				result.enemyName = enemy.local.email;
-
-				 				if(game.status != "setup")
-				 				{
-				 					game.getMyGameboard(userId, function(err, myGameboard){
+						 
+						game.getMyGameboard(userId, function(err, myGameboard){
+							
+							if(myGameboard)
+								result.myGameboard = myGameboard;
+							
+							
+							if(game.status != "que")
+				 			{
+				 				var enemyId = game.player1;
+				 				if(game.player1.equals(req.user._id))
+				 					enemyId = game.player2;
+	
+				 				//Get the user element of the enemy player
+				 				User.findById(enemyId, function(err, enemy){
+	
+					 				result.enemyId = enemy._id;
+					 				result.enemyName = enemy.local.email;
+	
+					 				if(game.status != "setup"){
 						 				game.getEnemyGameboard(userId, function(err, enemyGameboard){
 						 					enemyGameboard.ships = undefined;
-						 					result.myGameboard = myGameboard,
-						 					result.enemyGameboard = enemyGameboard,
+						 					result.myGameboard = myGameboard;
+						 					result.enemyGameboard = enemyGameboard;
 						 					res.json(result);
-						 				});
-						 			});
-				 				}
-				 				else
-				 				{
-				 					res.json(result);
-				 				}
-			 				})
-			 			}
-			 			else
-			 			{
-			 				res.json(result);
-			 			}
+						 				});	
+					 				}
+					 				else{
+					 					res.json(result);
+					 				}
+				 				});
+				 			}
+				 			else
+				 			{
+				 				res.json(result);
+				 			}
+							
+						});
 			 		}
 			 		else
 			 		{
