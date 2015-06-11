@@ -9,8 +9,9 @@ function initIo(){
 
         var token = socket.handshake.query.token;
         User.findOne({ "local.token": token }, function (err, user) {
-            if (!user) { socket.emit('Not a valid API token') }{
-
+            if (!user) {
+                socket.emit('Not a valid API token')
+            } else {
                 Game.myGames(user._id, function(err, games){
 
                     games.forEach(function(game){
