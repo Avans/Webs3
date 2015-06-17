@@ -48,7 +48,7 @@ router.route('/me/games')
 			games.forEach(function(game){
 				game.remove();
 			});
-			
+
 			res.json({msg: "Games removed succesfully"});
 		});
 	});
