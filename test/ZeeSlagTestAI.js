@@ -108,6 +108,15 @@ describe('Test that depend on AI', function(){
 
 				expect(games.length).to.eql(0);
 
+				// Extra bogus game
+				request(app)
+				.get('/games/ai?token=' + testData.gToken)
+				.expect(200)
+				.end(function(err, res){
+					if(err){ return done(err);}
+				});
+
+				// Second game
 				request(app)
 				.get('/games/ai?token=' + testData.gToken)
 				.expect(200)
@@ -116,7 +125,7 @@ describe('Test that depend on AI', function(){
 
 					Game.find(function(err, games){
 
-						expect(games.length).to.eql(1);
+						expect(games.length).to.eql(2);
 
 						var game = res.body;
 						expect(game.isAI).to.be.true;
@@ -160,6 +169,16 @@ describe('Test that depend on AI', function(){
 
 					done();
 				});
+			});
+		});
+
+		it('/games/:id should return the game', function(done) {
+			request(app)
+			.get('/games/' + testData.gameId + '?token=' + testData.gToken)
+			.expect(200)
+			.end(function(err, res){
+				if(err){ return done(err); }
+				done();
 			});
 		});
 	});

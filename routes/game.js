@@ -53,8 +53,18 @@ router.route('/')
 router.route('/AI')
 
 	.get(token.validate, function(req, res, next){
+		var AI_ID = "55590d0ca742e811006bf1e2";
 
-		newGame = new Game({player1: req.user._id, player2: "55590d0ca742e811006bf1e2", isAI: true,});
+		// Ensure the AI user exists
+		new User({
+		"_id": AI_ID,
+		local: {
+			"token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ImNvbXB1dGVyIg.Q6ngbbjB3bwhPJEUh8dSXHFggFgMqQZQXDQEoh5qPHI",
+			"password" : "$2a$08$rXG6iWPkWZk4nVHcB4H3b.C5Zjm0symOwpPOD3i2Mb.9U1j8oTe8y",
+			"email" : "computer"
+		}}).save();
+
+		newGame = new Game({player1: req.user._id, player2: AI_ID, isAI: true,});
 		newGame.status = Game.schema.status.setup;
 		newGame.save(function(err, newGame){
 			res.send(newGame);
