@@ -1,51 +1,38 @@
+
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
+var exphbs = require('express-handlebars');
 var session = require('express-session');
+var path = require('path');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var morgan = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
-var expressHbs = require('express3-handlebars');
-var flash  = require('connect-flash');
-
 
 var dbConfig = require('./config/database');
-var passConfig = require('./config/passport')(passport);
-mongoose.connect(dbConfig.url);
+var corsConfig = require('./config/cors');
 
-var app = express();
-
-//Require models and routes and configs
+//Require models
 require('./model/gameboard');
 require('./model/game');
 require('./model/user');
 
+mongoose.connect(dbConfig.url);
+
+var app = express();
+
+//Include passports
+require("./modules/avans-passportModule")(passport);
+app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); 
 
 //View Engine
-app.engine('hbs', expressHbs({extname:'hbs', defaultLayout:'main.hbs'}));
+app.engine('hbs', exphbs({extname:'hbs', defaultLayout:'main.hbs'}));
 app.set('view engine', 'hbs');
 
 // Add headers
-app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
-});
+app.use(corsConfig);
 
 //global settings
 app.use(morgan('dev')); // log every request to the console
@@ -54,20 +41,15 @@ app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-//passport
-app.use(session({ secret: 'linksonderisthebestleagueplayerintheworld' })); // session secret
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessiNons
-app.use(flash()); // use connect-flash for flash messages stored in session
 
 //Route all the routes!
 var gameboard = require('./routes/gameboard');
 var game = require('./routes/game');
 var user = require('./routes/user');
 var ship = require('./routes/ships');
-var index = require("./routes/index")(app, passport);
+var index = require("./routes/index");
 
-
+app.use('/', index);
 app.use('/', gameboard); //Starts @ root
 app.use('/users', user);
 app.use('/ships', ship);

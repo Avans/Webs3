@@ -28,11 +28,11 @@ router.route('/me/games')
 				{
 					var enemy = game.player1; //player 1 is enemy
 
-					if(game.player1._id.equals(req.user._id))
+					if(game.player1._id == req.user._id)
 					 	enemy = game.player2; //if player 1 is not current player
 
 					item.enemyId = enemy._id;
-					item.enemyName = enemy.local.email;
+					item.enemyName = enemy.name;
 				}
 
 				result.push(item);

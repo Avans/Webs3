@@ -19,9 +19,9 @@
 			Klik bijvoorbeeld maar eens op de onderstaande link.
 		</p>
 
-		{{#if user.local.email }}
+		{{#if user }}
 			<p>
-				<a href="/users/me/games?token={{user.local.token}}" target="blank">/users/me/games?token={{user.local.token}}</a>
+				<a href="/users/me/games?token={{user.token}}" target="blank">/users/me/games?token={{user.token}}</a>
 			</p>
 		{{else}}
 		<p class="bg-warning">De link is niet zichtbaar want je niet bent ingelogd</p>
@@ -199,9 +199,9 @@
 		</p>
 
 
-		{{#if user.local.email }}
+		{{#if user }}
 			<p>
-				<a href="/games/7?token={{user.local.token}}" target="blank">/games/7?token={{user.local.token}}</a>
+				<a href="/games/7?token={{user.token}}" target="blank">/games/7?token={{user.token}}</a>
 			</p>
 		{{else}}
 		<p class="bg-warning">De link is niet zichtbaar want je niet bent ingelogd</p>

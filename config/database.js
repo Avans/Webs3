@@ -1,6 +1,6 @@
 module.exports = {
 
-	url: "mongodb://avans:avans@ds031751.mongolab.com:31751/linksonder",
+	url: "mongodb://avans:Ab12345@ds015750.mlab.com:15750/zeeslag",
 	testUrl: "localhost:27017/ZeeSlagTest"
 
 }

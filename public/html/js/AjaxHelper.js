@@ -1,7 +1,6 @@
 AjaxHelper = {
 	server: 'http://localhost:3000/',//'http://zeeslagavanstest.herokuapp.com/', //https://zeeslagavans.herokuapp.com/',
-	//token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.Imxpbmtzb25kZXJAZ21haWwuY29tIg.rqem1luf3wKIjLqWhUrR7bDa18kGLN9P8wYCVTEFY-I", //Linksonder
-	token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InJlY2h0c2JvdmVuIg.sCsFmIBuvzvOpv3kOtlX6GtEpLGaXvzyFFSmqVrSzXk", //Rechtsboven
+	token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InMuc211bGRlcnNAYXZhbnMubmwi.eu926uUUa37v50xtsqRcr9vthtHI8NKSkQPVdi4yhLU", //Rechtsboven
 	GET : function(url, options){
 		$.ajax({
 		    type:'GET',

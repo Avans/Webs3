@@ -10,7 +10,7 @@ module.exports = {
 
 		if(token)
 		{
-			User.findOne({ "local.token": token }, function (err, user) {
+			User.findOne({ "token": token }, function (err, user) {
 	          if (err) { res.json(err); }
 	          else if (!user) { res.json({msg: "Error: not a valid API key.", key: token}); }
 	          else{

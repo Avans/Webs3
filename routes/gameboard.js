@@ -107,7 +107,7 @@ var io = require('../sockets/socket')();
 
 	function SetGameboardsToGame(req, res, game, gameboard, gameboardAI){
 		//user 1 or user 2?
-		if(game.player1.equals(req.user._id))
+		if(game.player1 == req.user._id)
 		game.board1 = gameboard._id;
 		else
 		game.board2 = gameboard._id;
@@ -163,7 +163,7 @@ var io = require('../sockets/socket')();
 					if(game.status != Game.schema.status.started)
 						return res.json({msg: "Error: This game does not have the right status.", gameId: game._id });
 
-					if(!game.turn.equals(req.user._id))
+					if(!game.turn == req.user._id)
 						return res.json({msg: "Error: It is not the your turn to add a shot", gameId: game._id });
 
 
@@ -191,7 +191,7 @@ var io = require('../sockets/socket')();
 
 								gameboard.save(function(err, gameboard){
 
-									var enemyId = req.user._id.equals(game.player1) ? game.player2 : game.player1;
+									var enemyId = req.user._id == game.player1 ? game.player2 : game.player1;
 									game.turn = enemyId;
 									var response = "SPLASH";
 									if(isHit)

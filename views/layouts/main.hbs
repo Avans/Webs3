@@ -1,20 +1,10 @@
 <html>
 	<head>
 	<title>ZeeSlag Api</title>
-				<!-- Latest compiled and minified CSS -->
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-			<!-- Optional theme -->
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-			<!-- Latest compiled and minified JavaScript -->
 			<link rel="stylesheet" href="/stylesheets/style.css" >
-			<style>
-				body { padding-top: 70px; }
-				.fixed{ position: fixed;}
-				.docs > section{
-					border-bottom: 1px solid gray;
-					padding-top:40px;
-				}
-			</style>
+            <link rel="stylesheet" href="/stylesheets/zeeslag.css" >
 	</head>
 	<body>
 
@@ -38,7 +28,7 @@
 		      </ul>
 		     
 		      <ul class="nav navbar-nav navbar-right">
-		      	{{#if user.local.email }} 
+		      	{{#if user }} 
 		        	<li><a href="/profile">Profile</a></li>
 		        	<li><a href="/logout">Logout</a></li>
 		        {{else}}
