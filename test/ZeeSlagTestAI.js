@@ -90,8 +90,14 @@ describe('Test that depend on AI', function(){
 	/** Init the test data **/
 	before('Hook: before test set', function(done) {
 
-		var user = new User({ _id: testData.gUserId, token: testData.gToken, email: "test@mail.com" });
-		user.save(function(err, user){done();});
+		async.parallel([
+			function(done) {
+				var user = new User({ _id: testData.gUserId, token: testData.gToken, email: "test@mail.com" });
+				user.save(done);
+			}, function(done) {
+				var ai = new User({ _id: 'AI'});
+				ai.save(done);
+			}], done);
 
 	});
 
