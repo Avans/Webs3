@@ -90,7 +90,7 @@ describe('Test that depend on AI', function(){
 	/** Init the test data **/
 	before('Hook: before test set', function(done) {
 
-		var user = new User({ _id: testData.gUserId, local: {token: testData.gToken, email: "test@mail.com" }});
+		var user = new User({ _id: testData.gUserId, token: testData.gToken, email: "test@mail.com" });
 		user.save(function(err, user){done();});
 
 	});
