@@ -67,10 +67,18 @@
   gameSchema.methods.getMyGameboard = function(playerId, callback)
   {
       if(this.player1 == playerId){
-        Gameboard.findById(this.board1, callback);
+        if(this.board1) {
+          Gameboard.findById(this.board1, callback);
+        } else {
+          callback(null, null);
+        }
       }
       else if(this.player2 == playerId){
-        Gameboard.findById(this.board2, callback);
+        if(this.board2) {
+          Gameboard.findById(this.board2, callback);
+        } else {
+          callback(null, null);
+        }
       }
       else{
         callback({msg: "Error: You are not a player in this game.", gameId: this._id });//Return without a board :(
