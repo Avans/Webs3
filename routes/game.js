@@ -17,7 +17,7 @@ router.route('/')
 	/** All the gameboards that currently are active **/
 	.get(token.validate, function(req, res, next) {
 
-		Game.find({player2: undefined, isAI: false})
+		Game.find({player2: { $exists: false}, isAI: false})
 			.exec(function(err, games){
 
 				//Select first game
