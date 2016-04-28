@@ -10,13 +10,13 @@
   var gameSchema = new Schema({
     _id: Number,
     isAI: { type: Boolean , default: false },
-    player1: { type: Schema.Types.ObjectId, ref: 'User'},
-    player2: { type: Schema.Types.ObjectId, ref: 'User'},
+    player1: { type: String, ref: 'User'},
+    player2: { type: String, ref: 'User'},
     board1: {  type: Number, ref: 'Gameboard' },
     board2: {  type: Number, ref: 'Gameboard' },
     status: {  type: String, enum: [ "que", "setup", "started", "done"]},
-    turn: { type: Schema.Types.ObjectId },
-    winner: { type: Schema.Types.ObjectId, ref: 'User'},
+    turn: { type: String },
+    winner: { type: String, ref: 'User'},
   });
 
   // gameSchema.pre('save', function(next){
@@ -59,18 +59,26 @@
 
   gameSchema.methods.containsPlayer = function(playerId)
   {
-    return this.player1.equals(playerId) || this.player2.equals(playerId);
+    return this.player1 == playerId || this.player2 == playerId;
   }
 
   /** ------ GetMyGameboard -------- **/
   /** Returns a fully filled gameboard that you own **/
   gameSchema.methods.getMyGameboard = function(playerId, callback)
   {
-      if(this.player1.equals(playerId)){
-        Gameboard.findById(this.board1, callback);
+      if(this.player1 == playerId){
+        if(this.board1) {
+          Gameboard.findById(this.board1, callback);
+        } else {
+          callback(null, null);
+        }
       }
-      else if(this.player2.equals(playerId)){
-        Gameboard.findById(this.board2, callback);
+      else if(this.player2 == playerId){
+        if(this.board2) {
+          Gameboard.findById(this.board2, callback);
+        } else {
+          callback(null, null);
+        }
       }
       else{
         callback({msg: "Error: You are not a player in this game.", gameId: this._id });//Return without a board :(
@@ -88,14 +96,14 @@
               var result = {
                 _id: game._id,
                 status: game.status,
-                yourTurn:  req.user._id.equals(game.turn),
-                youWon: req.user._id.equals(game.winner)
+                yourTurn:  req.user._id == game.turn,
+                youWon: req.user._id == game.winner
               };
 
               if(game.status != "que")
               {
                 var enemyId = game.player1;
-                if(game.player1.equals(req.user._id))
+                if(game.player1 == req.user._id)
                   enemyId = game.player2;
 
                 //Get the user element of the enemy player
@@ -132,10 +140,10 @@
   /** Returns a semi filled gameboard (without ships) that you do not own **/
   gameSchema.methods.getEnemyGameboard = function(playerId, callback)
   {
-      if(this.player1.equals(playerId)){
+      if(this.player1 == playerId){
          Gameboard.findById(this.board2, callback);
       }
-      else if(this.player2.equals(playerId)){
+      else if(this.player2 == playerId){
           Gameboard.findById(this.board1, callback);
       }
       else{

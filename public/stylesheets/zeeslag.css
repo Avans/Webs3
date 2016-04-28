@@ -1,0 +1,31 @@
+.gameboard td{
+    padding:4px;
+    font-size:9px;
+    color:darkblue;
+    text-align: center;
+    width:25px; height:25px;
+}
+
+    .gameboard td:hover{
+        color:white;
+        background-color:darkblue;
+        cursor:pointer;
+    }
+    
+    .gameboard.disabled td{
+        color:gray;
+        background-color:lightgray;
+        cursor:not-allowed;
+    }
+
+.gameboard{
+    border:1px double gray;
+    margin:5px;
+    background-color:lightblue;
+    float:left;
+}
+
+
+#game{
+    display:none;
+}

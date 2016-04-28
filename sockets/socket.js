@@ -33,6 +33,7 @@ function sendUpdate(gameId){
 }
 
 module.exports = function(http){
+    
 
     if(!io && http){
         io = require('socket.io').listen(http);
@@ -40,6 +41,6 @@ module.exports = function(http){
     }
 
     return {
-       sendUpdate: sendUpdate
+        sendUpdate: sendUpdate
     };
 };

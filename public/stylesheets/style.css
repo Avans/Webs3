@@ -10,3 +10,9 @@ a {
 
 
 
+body { padding-top: 70px; }
+.fixed{ position: fixed;}
+.docs > section{
+    border-bottom: 1px solid gray;
+    padding-top:40px;
+}

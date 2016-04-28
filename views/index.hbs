@@ -1,8 +1,8 @@
 <div class="col-sm-6 col-sm-offset-3">
 
 	<h1><span class="fa fa-sign-in"></span>Zeeslag</h1>
-
-	<p>Welkom op de zeeslag <b>API (application programming interface)</b>.</p>
+    
+	<p>Welkom  {{#if user}}<b>{{user.name}}</b>{{/if}} op de zeeslag <b>API (application programming interface)</b>.</p>
 
 	<p>
 	Deze API is gemaakt voor het vak Webs 3, als backend voor de eindopracht 'zeeslag'.
@@ -12,5 +12,10 @@
 	<p>De communicatie van deze API wordt afgehandeld door <b>JSON (JavaScript Object Notation)</b> berichten.
 	Het is mogelijk JSON naar de server te sturen en JSON via de server te ontvangen.
 	</p>
+    
+    <p>Heb je vragen of klachten over de API? Misschien een bug gevonden? Stuur dan een mailtje naar 
+        <A HREF="mailto:ssmulder@avans.nl">ssmulder@avans.nl</a>.</p>
+
+
 
 </div>

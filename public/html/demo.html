@@ -44,9 +44,20 @@
 			
 						</div>
 					</div>
+                    
+                    <div class="panel-default">
+					 	<div class="panel-heading">
+					    	<h3 class="panel-title">API key</h3>
+						</div>
+						<div class="panel-body" >
+			                 <select id="api">
+                                 <option value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.InMuc211bGRlcnNAYXZhbnMubmwi.eu926uUUa37v50xtsqRcr9vthtHI8NKSkQPVdi4yhLU">Stijn Smulders</option>
+                             </select>
+						</div>
+					</div>
 				</div>
 
-				<div id="gameboard" class="col-md-6 hidden">
+				<div id="gameboard" class="col-md-6">
 					<div class="panel-default">
 						<div class="panel-heading">
 						 	<h3 class="panel-title">Gameboard</h3>
@@ -98,9 +109,9 @@
 	<script src="js/GameController.js"></script>
 	<script src="js/BoatController.js"></script>
 	<script src="js/GameboardController.js"></script>
-	<script src="http://zeeslagavanstest.herokuapp.com/socket.io/socket.io.js"></script>
+	<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 			<script>	
-				var server = 'http://zeeslagavanstest.herokuapp.com/';
+				var server = 'http://localhost:3000/';
 				var options = {
 					query: "token=" + AjaxHelper.token,
 				};
@@ -128,15 +139,6 @@
 		});
 
 		$('#gameboard table').append(htmlString);
-		// $('.cell').click(function(event){
-		// 	var axis = event.target.id.split('/');
-		// 	var x = axis[0]; //Is a string
-		// 	var y = parseInt(axis[1]); //Ís a number
-		// 	$.post("http://localhost:3000/games/1/shots",  {x: x, y: y})
-		// 	.done(function(data){
-		// 		console.log(data);
-		// 	});
-		// });
 
 	
 	</script>

@@ -17,7 +17,7 @@ router.route('/')
 	/** All the gameboards that currently are active **/
 	.get(token.validate, function(req, res, next) {
 
-		Game.find({player2: undefined})
+		Game.find({player2: { $exists: false}, isAI: false})
 			.exec(function(err, games){
 
 				//Select first game
@@ -25,9 +25,9 @@ router.route('/')
 				//Todo: Replace 'currentUser' with username of current username
 				var currentUser =  req.user;
 
-				if(game && game.player1.equals(req.user._id))
+				if(game && _.isEqual(game.player1, req.user._id))
 				{
-					res.json({msg: "Error: You are currently pending for a game."})
+					res.json({error: "Error: You are currently pending for a game."})
 				}
 				else if(game) //If game found, add current player and return game
 				{
@@ -53,18 +53,7 @@ router.route('/')
 router.route('/AI')
 
 	.get(token.validate, function(req, res, next){
-		var AI_ID = "55590d0ca742e811006bf1e2";
-
-		// Ensure the AI user exists
-		new User({
-		"_id": AI_ID,
-		local: {
-			"token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.ImNvbXB1dGVyIg.Q6ngbbjB3bwhPJEUh8dSXHFggFgMqQZQXDQEoh5qPHI",
-			"password" : "$2a$08$rXG6iWPkWZk4nVHcB4H3b.C5Zjm0symOwpPOD3i2Mb.9U1j8oTe8y",
-			"email" : "computer"
-		}}).save();
-
-		newGame = new Game({player1: req.user._id, player2: AI_ID, isAI: true,});
+		newGame = new Game({player1: req.user._id, player2: "AI", isAI: true,});
 		newGame.status = Game.schema.status.setup;
 		newGame.save(function(err, newGame){
 			res.send(newGame);
@@ -93,8 +82,8 @@ router.route('/AI')
 			 			var result = {
 			 				_id: game._id,
 			 				status: game.status,
-			 				yourTurn:  req.user._id.equals(game.turn),
-			 				youWon: req.user._id.equals(game.winner)
+			 				yourTurn:  req.user._id == game.turn,
+			 				youWon: req.user._id == game.winner
 			 			};
 
 						game.getMyGameboard(userId, function(err, myGameboard){
@@ -106,14 +95,14 @@ router.route('/AI')
 							if(game.status != "que")
 				 			{
 				 				var enemyId = game.player1;
-				 				if(game.player1.equals(req.user._id))
+				 				if(game.player1 == req.user._id)
 				 					enemyId = game.player2;
 
 				 				//Get the user element of the enemy player
 				 				User.findById(enemyId, function(err, enemy){
 
 					 				result.enemyId = enemy._id;
-					 				result.enemyName = enemy.local.email;
+					 				result.enemyName = enemy.name;
 
 					 				if(game.status != "setup"){
 						 				game.getEnemyGameboard(userId, function(err, enemyGameboard){

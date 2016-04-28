@@ -12,6 +12,11 @@ var app = {
 		app.boatController.getAllBoats();
 
 		app.gameboardController = new GameboardController();
+        
+        $( "#api" ).change(function() {
+            AjaxHelper.token = $(this).val();
+            app.init();
+        });
 	},
 	game: null,
 }
