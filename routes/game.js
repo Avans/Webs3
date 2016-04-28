@@ -42,7 +42,7 @@ router.route('/')
 				{
 
 					newGame = new Game({player1: req.user._id});
-					newGame.status = Game.schema.status.que;
+					newGame.status = Game.schema.status.queue;
 					newGame.save(function(err, newGame){
 						res.send(newGame);
 					});
@@ -92,7 +92,7 @@ router.route('/AI')
 								result.myGameboard = myGameboard;
 
 
-							if(game.status != "que")
+							if(game.status != "queue")
 				 			{
 				 				var enemyId = game.player1;
 				 				if(game.player1 == req.user._id)

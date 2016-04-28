@@ -24,7 +24,7 @@ router.route('/me/games')
 
 				var item = {_id: game._id,status: game.status};
 
-				if(game.status != "que" && game.player1 && game.player2)
+				if(game.status != "queue" && game.player1 && game.player2)
 				{
 					var enemy = game.player1; //player 1 is enemy
 

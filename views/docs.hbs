@@ -5,7 +5,7 @@
 	<section class="" id="APIKEY" data-spy="APIKEY" data-target="#APIKEY">
 
 		<h3>De API Key</h3>
-		
+
 
 		<p>
 			Het is alleen mogelijk om data van de server op te halen door aan elk request een API key toe te voegen.
@@ -65,7 +65,7 @@
 
 		<ol>
 			<li>Speler A vraagt een game aan</li>
-			<li>Speler A komt in een game met de status <b>que</b></li>
+			<li>Speler A komt in een game met de status <b>queue</b></li>
 			<li>Speler B vraagt een game aan</li>
 			<li>Speler B komt in de game van speler A met de status <b>setup</b></li>
 			<li>Speler A submit een gameboard (lijst van schepen)</li>
@@ -126,7 +126,7 @@
 		<p class="bg-warning">DELETE</p>
 
 		<p>
-			Via deze route is het mogelijk alle games waar je deel aan neemt te verwijderen. De request hoeft verder geen body te hebben. 
+			Via deze route is het mogelijk alle games waar je deel aan neemt te verwijderen. De request hoeft verder geen body te hebben.
 		</p>
 
 		<h4>Return value</h4>
@@ -143,7 +143,7 @@
 		<p class="bg-success">GET</p>
 
 		<p>Via deze route kun je een nieuwe game opvragen met als tegenstander een andere student.</p>
-		<p>Als er al een game op de server staat met maar 1 speler, dan zul je deze game joinen, en zal de status naar de game veranderen naar <b>setup</b>. Als er geen game meer open staat, zal de server een nieuwe game voor aanmaken en krijgt deze de status <b>que</b>.
+		<p>Als er al een game op de server staat met maar 1 speler, dan zul je deze game joinen, en zal de status naar de game veranderen naar <b>setup</b>. Als er geen game meer open staat, zal de server een nieuwe game voor aanmaken en krijgt deze de status <b>queue</b>.
 		<p>Indien je al een game tegen een andere student hebt aangevraagd, zal de server een error terug geven</p>
 
 		<h4>Return value</h4>
@@ -151,7 +151,7 @@
 		<pre>
 {
     "_id": 9,
-    "status": "setup | que",
+    "status": "setup | queue",
     "player1": "<player1Id>",
     "player2": "<player2Id> | undefined",
     "__v": 0,
@@ -209,7 +209,7 @@
 
 		<p>Elke game heeft de volgende eigenschappen
 			<ul>
-				<li>Een status ("que" | "setup" | "started" | "done"</li>
+				<li>Een status ("queue" | "setup" | "started" | "done"</li>
 				<li>Your Turn ("true" | "false")</li>
 				<li>Enemy Id en enemy Name</li>
 				<li>My gameboard en enemy gameboard
@@ -349,7 +349,7 @@
 		</p>
 
 		<h4>Post object</h4>
-		
+
 		<p>Gebruik <i>geen</i> JSON.stringify op dit object als je het via AJAX verstuurrd.</p>
 
 		<pre>
@@ -506,12 +506,12 @@ var socket = io.connect(server, options);
 		<h4>Luisteren naar berichten</h4>
 
 		<p>Indien de server ziet dat een game waar jij onderdeel van bent een update heeft, zal hij een berichtje met de naam <b>'update'</b> versturen.
-		Als parameter krijg je het ID van de game die veranderd is mee (<b>gameId</b>). 
+		Als parameter krijg je het ID van de game die veranderd is mee (<b>gameId</b>).
 		</p>
 
 		<pre>
 socket.on('update', function(gameId){
-  	
+
 });
 </pre></br>
 

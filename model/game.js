@@ -14,7 +14,7 @@
     player2: { type: String, ref: 'User'},
     board1: {  type: Number, ref: 'Gameboard' },
     board2: {  type: Number, ref: 'Gameboard' },
-    status: {  type: String, enum: [ "que", "setup", "started", "done"]},
+    status: {  type: String, enum: [ "queue", "setup", "started", "done"]},
     turn: { type: String },
     winner: { type: String, ref: 'User'},
   });
@@ -28,7 +28,7 @@
   gameSchema.plugin(autoIncrement.plugin, 'Game');
 
   gameSchema.status = {
-    que: "que",
+    queue: "queue",
     setup: "setup",
     started: "started",
     done: "done"
@@ -100,7 +100,7 @@
                 youWon: req.user._id == game.winner
               };
 
-              if(game.status != "que")
+              if(game.status != "queue")
               {
                 var enemyId = game.player1;
                 if(game.player1 == req.user._id)

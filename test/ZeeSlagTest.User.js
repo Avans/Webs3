@@ -41,7 +41,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 					var game3 = new Game({
 						_id: 3,
 						player2: "552675ef7aa073c044cdc274",
-						status: Game.schema.status.que
+						status: Game.schema.status.queue
 					});
 					game3.save(function(){cb();});
 				}

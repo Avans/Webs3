@@ -28,7 +28,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				});
 		});
 
-		it('should GET return 1 game with 1 players and status que', function(done){
+		it('should GET return 1 game with 1 players and status queue', function(done){
 
 			request(app)
 				.get('/games?token=' + gToken)
@@ -39,7 +39,7 @@ module.exports = function(app, Game, User, gToken, gUserId){
 
 					expect(res.body.player1).to.be.equal(gUserId);
 					expect(res.body.player2).to.be.an('undefined');
-					expect(res.body.status).to.equal('que');
+					expect(res.body.status).to.equal('queue');
 
 					done(null, res);
 				});
