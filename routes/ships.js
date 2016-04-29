@@ -14,7 +14,7 @@ Ship.find(function(err, ships){
 
 		async.parallel([
 	      function(done){ (new Ship({length: 2, name: "Patrol boat"})).save(done) },
-	 	  function(done){ (new Ship({length: 3, name: "Destoryer"})).save(done) },
+	 	  function(done){ (new Ship({length: 3, name: "Destroyer"})).save(done) },
 	 	  function(done){ (new Ship({length: 3, name: "Submarine"})).save(done) },
 	 	  function(done){ (new Ship({length: 4, name: "Battleship"})).save(done) },
 	 	  function(done){ (new Ship({length: 5, name: "Aircraft carrier"})).save(done) }
