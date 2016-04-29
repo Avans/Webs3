@@ -24,7 +24,7 @@
 				<a href="/users/me/games?token={{user.token}}" target="blank">/users/me/games?token={{user.token}}</a>
 			</p>
 		{{else}}
-		<p class="bg-warning">De link is niet zichtbaar want je niet bent ingelogd</p>
+		<p class="bg-warning">De link is niet zichtbaar want je bent niet ingelogd</p>
 		{{/if}}
 		<p>Door achter de de <b>route</b> een parameter met de naam <b>token</b> te zetten kun je de API key meegeven.</p>
 
@@ -41,12 +41,12 @@
 		<h3>Spelregels</h3>
 
 		<p>
-			Zeeslag is een spel met maar een basis set aan spel regels.
+			Zeeslag is een spel met maar een basisset aan spelregels.
 			Het model wat we gaan gebruiken om informatie op te halen en op te slaan is ook niet heel er ingewikkeld.
 		</p>
 
 		<p>
-			Het doel van zeeslag is het laten <b>zinken</b> van alle schepen van de tegenstander. De schepen bevinden zich op een Grid van <b>10x10</b> vakjes. Bij het opzetten (setup) van het spel moeten de beiden spelers de schepen op het bord plaatsen. In de digitale vorm heeft elk schip een start vakje, lengte en oriëntatie (Verticaal of horizontaal).
+			Het doel van zeeslag is het laten <b>zinken</b> van alle schepen van de tegenstander. De schepen bevinden zich op een Grid van <b>10x10</b> vakjes. Bij het opzetten (setup) van het spel moeten de beide spelers de schepen op het bord plaatsen. In de digitale vorm heeft elk schip een start vakje, lengte en oriëntatie (verticaal of horizontaal).
 		</p>
 
 		<p>
@@ -54,7 +54,7 @@
 		</p>
 
 		<p>
-			Als een speler alle schepen van de tegenstander heeft laten zinken, wint hij het spel!
+			Als een speler alle schepen van de tegenstander heeft laten zinken wint hij het spel!
 		</p>
 
 		<p>
@@ -143,7 +143,7 @@
 		<p class="bg-success">GET</p>
 
 		<p>Via deze route kun je een nieuwe game opvragen met als tegenstander een andere student.</p>
-		<p>Als er al een game op de server staat met maar 1 speler, dan zul je deze game joinen, en zal de status naar de game veranderen naar <b>setup</b>. Als er geen game meer open staat, zal de server een nieuwe game voor aanmaken en krijgt deze de status <b>queue</b>.
+		<p>Als er al een game op de server staat met maar 1 speler, dan zul je deze game joinen, en zal de status naar de game veranderen naar <b>setup</b>. Als er geen game meer open staat, zal de server een nieuwe game voor je aanmaken en krijgt deze de status <b>queue</b>.
 		<p>Indien je al een game tegen een andere student hebt aangevraagd, zal de server een error terug geven</p>
 
 		<h4>Return value</h4>
@@ -334,7 +334,7 @@
 		</p>
 
 		<p class="bg-info">
-			<b>Tip</b> - Gebruik de result set van de resourse <b>/ships</b> om een lijst van schepen te maken.
+			<b>Tip</b> - Gebruik de result set van de resource <b>/ships</b> om een lijst van schepen te maken.
 			Voeg per 'ship' de volgende properties toe:
 			<ul>
 				<li>Een JSON object met de naam startCell <i>(bijv: {x: 'a', y: 6})</i></li>
@@ -350,7 +350,7 @@
 
 		<h4>Post object</h4>
 
-		<p>Gebruik <i>geen</i> JSON.stringify op dit object als je het via AJAX verstuurrd.</p>
+		<p>Gebruik <i>geen</i> JSON.stringify op dit object als je het via AJAX verstuurd.</p>
 
 		<pre>
 { "ships": [{
@@ -492,7 +492,7 @@
 
 		<h4>Verbinding maken met de socket</h4>
 
-		<p>Als de file is toevegoed kun je een <b>socket</b> object defineren. </p>
+		<p>Als de file is toevegoed kun je een <b>socket</b> object definiëren. </p>
 
 		<pre>
 var server = 'https://zeeslagavans.herokuapp.com/';
