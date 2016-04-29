@@ -44,11 +44,21 @@ module.exports = function(app, Game, User, gToken, gUserId){
 						status: Game.schema.status.queue
 					});
 					game3.save(function(){cb();});
-				}
+				},
+				function(cb){
+					var game4 = new Game({
+						_id:4,
+						player1: "552675ef7aa073c044cdc274",
+						player2: gUserId,
+						status: Game.schema.status.done,
+						winner: gUserId
+					});
+					game4.save(function(){cb();});
+				},
 			], function(){done();});
 		});
 
-		it('should GET return 2 games with the user as player', function(done){
+		it('should GET return 3 games with the user as player', function(done){
 
 			request(app)
 				.get('/users/me/games?token=' + gToken)
@@ -56,14 +66,30 @@ module.exports = function(app, Game, User, gToken, gUserId){
 				.end(function(err, res){
 					if(err){ return done(err); }
 
-					res.body.should.have.length(2);
+					res.body.should.have.length(3);
+
+					done();
+				});
+		});
+		
+		
+		it('should GET return 3 games with the user as player as winner', function(done){
+
+			request(app)
+				.get('/users/me/games?token=' + gToken)
+				.expect(200)
+				.end(function(err, res){
+					if(err){ return done(err); }
+
+					res.body.should.have.length(3);
+					expect(res.body[2].winner).to.equal(gUserId);
 
 					done();
 				});
 		});
 
 
-		it('should DELETE return "success" and vemove all games from that player', function(done){
+		it('should DELETE return "success" and remove all games from that player', function(done){
 
 			request(app)
 				.delete('/users/me/games?token=' + gToken)

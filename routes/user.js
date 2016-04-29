@@ -33,6 +33,11 @@ router.route('/me/games')
 
 					item.enemyId = enemy._id;
 					item.enemyName = enemy.name;
+					
+				}
+				
+				if(game.status == Game.schema.status.done){
+					item.winner = game.winner;
 				}
 
 				result.push(item);

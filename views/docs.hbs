@@ -87,8 +87,10 @@
 		<p>Via deze route krijg je een collectie van games waarin jij mee speelt. Elke game heeft de volgende eigenschappen:
 			<ul>
 				<li>Unique ID van de game</li>
+				<li>Status van de game</li>
 				<li>Unique ID van de tegenstander</li>
 				<li>De naam van de tegenstander</li>
+				<li>Eventueel de winnaar</li>
 			</ul>
 		</p>
 
@@ -97,22 +99,26 @@
 <pre>
 [
   {
-  	"_id":21,"status":"setup",
+  	"_id":21,
+	"status":"setup",
   	"enemyId":"55268f3aa43c82a4244bb00c",
   	"enemyName":"rechtsonder@gmail.com
-  },re
+  },
   {"
-  	_id":19,"status":"started",
+  	_id":19,
+	"status":"started",
    "enemyId":"55268f3aa43c82a4244bb00a"
    ,"enemyName":"rechtsboven@gmail.com"
   },
   {
-  	"_id":22,"status":"started",
+  	"_id":22,
+	"status":"started",
   	"enemyId":"55268f3aa43c82a4244bb00a",
   	"enemyName":"rechtsboven@gmail.com"
   },
   {
-  	"_id":23,"status":"started",
+  	"_id":23,
+	"status":"started",
   	"enemyId":"55268f3aa43c82a4244bb00a",
   	"enemyName":"rechtsboven@gmail.com"
   }
