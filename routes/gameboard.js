@@ -49,7 +49,7 @@ var io = require('../sockets/socket')();
 							else{
 
 								//add a new gameboard to the game
-								var gameboard = new Gameboard();
+								gameboard = new Gameboard();
 								var ships = req.body.ships;
 
 								//Voor de zekerheid nemen we alleen de velden over van ship die nodig zijn
@@ -58,7 +58,7 @@ var io = require('../sockets/socket')();
 										startCell: ships[i].startCell,
 										name: ships[i].name,
 										isVertical: ships[i].isVertical,
-										length: ships[i].length,
+										length: ships[i].length
 									};
 									gameboard.ships.push(ship);
 								}
@@ -163,7 +163,7 @@ var io = require('../sockets/socket')();
 					if(game.status != Game.schema.status.started)
 						return res.json({msg: "Error: This game does not have the right status.", gameId: game._id });
 
-					if(!game.turn == req.user._id)
+					if(game.turn != req.user._id)
 						return res.json({msg: "Error: It is not the your turn to add a shot", gameId: game._id });
 
 
