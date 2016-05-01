@@ -11,52 +11,49 @@ var token = require('../modules/tokenModule');
 
 /** --------  ALl the routes to  /users/:id/games --------------**/
 /** Req.user is available **/
-/**	All the routes for the gameboard **/
+/**    All the routes for the gameboard **/
 router.route('/me/games')
 
-	.get(token.validate, function(req, res, next){
-		Game.myGames(req.user._id, function(err, games){
+.get(token.validate, function(req, res, next) {
+	Game.myGames(req.user._id, function(err, games) {
 
-			var result = [];
+		var result = [];
 
-			//Foreach game in the result set
-			games.forEach(function(game){
+		//Foreach game in the result set
+		games.forEach(function(game) {
 
-				var item = {_id: game._id,status: game.status};
+			var item = { _id: game._id, status: game.status };
 
-				if(game.status != "queue" && game.player1 && game.player2)
-				{
-					var enemy = game.player1; //player 1 is enemy
+			if(game.status != "queue" && game.player1 && game.player2) {
+				var enemy = game.player1; //player 1 is enemy
 
-					if(game.player1._id == req.user._id)
-					 	enemy = game.player2; //if player 1 is not current player
+				if(game.player1._id == req.user._id) {
+					enemy = game.player2;
+				} //if player 1 is not current player
 
-					item.enemyId = enemy._id;
-					item.enemyName = enemy.name;
-					
-				}
-				
-				if(game.status == Game.schema.status.done){
-					item.winner = game.winner;
-				}
+				item.enemyId = enemy._id;
+				item.enemyName = enemy.name;
+			}
 
-				result.push(item);
-			});
-
-			res.json(result);//Send it away!
-
+			if(game.status == Game.schema.status.done) {
+				item.winner = game.winner;
+			}
+			result.push(item);
 		});
-	})
 
-	.delete(token.validate, function(req, res){
-		Game.myGames(req.user._id, function(err, games){
-			games.forEach(function(game){
-				game.remove();
-			});
+		res.json(result);//Send it away!
 
-			res.json({msg: "Games removed succesfully"});
-		});
 	});
+})
 
+.delete(token.validate, function(req, res) {
+	Game.myGames(req.user._id, function(err, games) {
+		games.forEach(function(game) {
+			game.remove();
+		});
+
+		res.json({ msg: "Games removed succesfully" });
+	});
+});
 
 module.exports = router;
