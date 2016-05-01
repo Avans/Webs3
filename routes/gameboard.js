@@ -221,7 +221,9 @@ router.route('/games/:id/shots')
 						game.save(function(err, game) {
 							if(game.isAI) {
 								req.result = response;
-								next();
+								if(game.status !== game.schema.status.done) {
+									next();
+								}
 							} else {
 								res.send(response);
 							}
@@ -229,14 +231,16 @@ router.route('/games/:id/shots')
 
 					});
 				} else {
+					// Send shot over socket to notify the user of the result
+					io.sendShot(game._id, req.user._id, { x: pShot.x, y: pShot.y }, response);
 					if(game.isAI) {
 						req.result = response;
-						next();
+						if(game.status !== game.schema.status.done) {
+							next();
+						}
 					} else {
 						res.send(response);
 					}
-					// Send shot over socket to notify the user of the result
-					io.sendShot(game._id, req.user._id, { x: pShot.x, y: pShot.y }, response);
 				}
 			});
 		}
@@ -273,6 +277,7 @@ router.route('/games/:id/shots')
 
 			game.turn = req.user._id;
 			io.sendTurnUpdate(game._id, game.turn);
+
 			game.save(function(err, game) {
 				res.send(req.result);
 			});
