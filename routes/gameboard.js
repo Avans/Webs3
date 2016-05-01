@@ -88,7 +88,6 @@ router.route('/games/:id/gameboards')
 							if(err) {
 								res.json(err);
 							} else {
-
 								//Check if enemy is AI
 								if(game.isAI) {
 									var gameboardAI = new Gameboard();
@@ -136,7 +135,6 @@ function SetGameboardsToGame(req, res, game, gameboard, gameboardAI) {
 		}
 	});
 }
-
 
 /**
  --------  ALl the routes to  /gameboards/:id/shots --------------
@@ -194,34 +192,37 @@ router.route('/games/:id/shots')
 				pShot.y = parseInt(pShot.y);
 
 				var shotFound = _.findWhere(gameboard.shots, pShot);
+				var response = "FAIL";
 
 				//if shots does NOT contain a shot that looks like pShot
 				if(!shotFound) {
+					response = "SPLASH";
+
 					var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
+					if(isHit) {
+						//If the ship is hit, we need to check of the game is over
+						if(gameboard.areAllShipsHit()) {
+							game.status = Game.schema.status.done;
+							game.winner = req.user._id;
+							response = "WINNER";
+							io.sendUpdate(game._id, Game.schema.status.done);
+						} else {
+							response = "BOOM";
+						}
+					}
+
+					// Send shot over socket to notify the user of the result
+					io.sendShot(game._id, game.turn, { x: pShot.x, y: pShot.y }, response);
 
 					gameboard.save(function(err, gameboard) {
 						game.turn = (req.user._id == game.player1) ? game.player2 : game.player1;
-						var response = "SPLASH";
-						if(isHit) {
-
-							//If the ship is hit, we need to check of the game is over
-							if(gameboard.areAllShipsHit()) {
-								game.status = Game.schema.status.done;
-								game.winner = req.user._id;
-								response = "WINNER";
-							}
-							else {
-								response = "BOOM";
-							}
-						}
+						io.sendTurnUpdate(game._id, game.turn);
 
 						game.save(function(err, game) {
 							if(game.isAI) {
 								req.result = response;
 								next();
-							}
-							else {
-								io.sendUpdate(game._id);
+							} else {
 								res.send(response);
 							}
 						});
@@ -229,12 +230,13 @@ router.route('/games/:id/shots')
 					});
 				} else {
 					if(game.isAI) {
-						req.result = "FAIL";
+						req.result = response;
 						next();
 					} else {
-						io.sendUpdate(game._id);
-						res.send("FAIL");
+						res.send(response);
 					}
+					// Send shot over socket to notify the user of the result
+					io.sendShot(game._id, req.user._id, { x: pShot.x, y: pShot.y }, response);
 				}
 			});
 		}
@@ -253,15 +255,24 @@ router.route('/games/:id/shots')
 		}
 
 		var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
+		var response = "SPLASH";
 
 		gameboard.save(function(err, gameboard) {
 
 			if(gameboard.areAllShipsHit()) {
 				game.status = Game.schema.status.done;
 				game.winner = game.player2; //The computer won the game omg!
+				response = "WINNER";
+				io.sendUpdate(game._id, Game.schema.status.done);
+			} else if(isHit) {
+				response = "BOOM";
 			}
 
+			// Send shot over socket to notify the user of the result
+			io.sendShot(game._id, game.turn, { x: pShot.x, y: pShot.y }, response);
+
 			game.turn = req.user._id;
+			io.sendTurnUpdate(game._id, game.turn);
 			game.save(function(err, game) {
 				res.send(req.result);
 			});

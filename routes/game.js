@@ -7,6 +7,7 @@ var Game = mongoose.model('Game');
 var Gameboard = mongoose.model('Gameboard');
 var User = mongoose.model('User');
 var token = require('../modules/tokenModule');
+var io = require('../sockets/socket')();
 
 /** --------  ALl the routes to  /games --------------**/
 /** Req.user is available **/
@@ -27,20 +28,26 @@ router.route('/')
 		var currentUser = req.user;
 
 		if(game && _.isEqual(game.player1, req.user._id)) {
-			res.json({ error: "Error: You are currently pending for a game." })
+			res.json({ error: "Error: You are currently pending for a game." });
+			return;
 		} else if(game) { //If game found, add current player and return game
 			game.player2 = req.user._id;
 			game.status = Game.schema.status.setup;
-			game.save(function(err, done) {
-				res.send(game);
-			});
 		} else { //If no available game found, make a new one
-			var newGame = new Game({ player1: req.user._id });
-			newGame.status = Game.schema.status.queue;
-			newGame.save(function(err, newGame) {
-				res.send(newGame);
-			});
+			game = new Game({ player1: req.user._id });
+			game.status = Game.schema.status.queue;
 		}
+
+		game.save(function(err, game) {
+			// Add user to new game
+			io.addGame(game._id, req.user.token);
+			console.log("Registering " + req.user.email + " for game " + game._id);
+
+			// Send status update
+			io.sendUpdate(game._id, game.status);
+
+			res.send(game);
+		});
 	});
 });
 
@@ -48,7 +55,15 @@ router.route('/AI')
 	.get(token.validate, function(req, res, next) {
 		var newGame = new Game({ player1: req.user._id, player2: "AI", isAI: true });
 		newGame.status = Game.schema.status.setup;
+
 		newGame.save(function(err, newGame) {
+			// Add user to new game
+			io.addGame(newGame._id, req.user.token);
+			console.log("Registering " + req.user.email + " for game " + newGame._id);
+
+			// Send status update
+			io.sendUpdate(newGame._id, newGame.status);
+
 			res.send(newGame);
 		});
 	});
