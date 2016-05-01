@@ -140,7 +140,7 @@ gameboardSchema.methods.isValid = function() {
 			//We only wanna check for more validation errors if the ship is still valid
 			if(shipIsValid) {
 				//Check if X is in bounds
-				if(!_.contains(xAxis, coord.x)) {
+				if(!_.contains(xAxis, coord.x.toLowerCase())) {
 					shipIsValid = false;
 					shipValidations.push("The ship '" + ship.name + "' is horizontally out of bounds (x)")
 				}
