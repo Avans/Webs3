@@ -221,9 +221,7 @@ router.route('/games/:id/shots')
 						game.save(function(err, game) {
 							if(game.isAI) {
 								req.result = response;
-								if(game.status !== game.schema.status.done) {
-									next();
-								}
+								next();
 							} else {
 								res.send(response);
 							}
@@ -235,9 +233,7 @@ router.route('/games/:id/shots')
 					io.sendShot(game._id, req.user._id, { x: pShot.x, y: pShot.y }, response);
 					if(game.isAI) {
 						req.result = response;
-						if(game.status !== game.schema.status.done) {
-							next();
-						}
+						next();
 					} else {
 						res.send(response);
 					}
