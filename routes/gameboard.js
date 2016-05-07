@@ -248,10 +248,12 @@ router.route('/games/:id/shots')
 	Gameboard.findById(game.board1, function(err, gameboard) {
 
 		var shotFound = true;
+		var valid = false;
 		var pShot;
-		while(shotFound) {
+		while(shotFound && !valid) {
 			pShot = RandomShot();
 			shotFound = _.findWhere(gameboard.shots, pShot);
+			valid = validateHit(pShot);
 		}
 
 		var isHit = gameboard.isShipHit(pShot); //also adds hits and stuff
