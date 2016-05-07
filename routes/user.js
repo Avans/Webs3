@@ -56,4 +56,15 @@ router.route('/me/games')
 	});
 });
 
+/** Req.user is available **/
+/** AGet basic user information **/
+router.route('/info')
+
+.get(token.validate, function(req, res) {
+	res.json({
+		"_id": req.user._id,
+		"name": req.user.name
+	});
+});
+
 module.exports = router;

@@ -78,6 +78,28 @@
 		</ol>
 
 	</section>
+	<section class="" id="userinfo" data-spy="userinfo" data-target="#userinfo">
+
+		<h3>/users/info</h3>
+
+		<p class="bg-success">GET</p>
+
+		<p>Via deze route kun je de informatie van de user ophalen:
+			<ul>
+				<li>Unique ID van de user</li>
+				<li>De naam van de user</li>
+			</ul>
+		</p>
+
+		<h4>Return value</h4>
+
+<pre>
+{
+	"_id":"rechtsonder@gmail.com",
+	"name":"Rechts onder"
+}</pre>
+
+	</section>
 	<section class="" id="megames" data-spy="megames" data-target="#megames">
 
 		<h3>/users/me/games</h3>
@@ -102,10 +124,10 @@
   	"_id":21,
 	"status":"setup",
 	"enemyId":"55268f3aa43c82a4244bb00c",
-    "enemyName":"rechtsonder@gmail.com
+	"enemyName":"rechtsonder@gmail.com"
   },
   {"
-  	_id":19,
+	_id":19,
 	"status":"started",
 	"enemyId":"55268f3aa43c82a4244bb00a",
 	"enemyName":"rechtsboven@gmail.com"
@@ -564,6 +586,7 @@ socket.on('turn', function(turn){
    		</li>
    		<li>Routes
    			<ul class="nav nav-list">
+   				<li><a href="#userinfo">/users/info</a></li>
    				<li><a href="#megames">/users/me/games</a></li>
    				<li><a href="#megamesdelete">/users/me/games</a></li>
    				<li><a href="#newGame">/games</a></li>
