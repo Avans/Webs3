@@ -58,7 +58,7 @@ router.route('/me/games')
 
 /** Req.user is available **/
 /** AGet basic user information **/
-router.route('/info')
+router.route('/me/info')
 
 .get(token.validate, function(req, res) {
 	res.json({
