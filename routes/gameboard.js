@@ -96,8 +96,8 @@ router.route('/games/:id/gameboards')
 										SetGameboardsToGame(req, res, game, gameboard, gameboardAI);
 									});
 								} else {
-									io.sendUpdate(game._id, game.status);
 									SetGameboardsToGame(req, res, game, gameboard);
+									io.sendUpdate(game._id, game.status);
 								}
 							}
 						});
