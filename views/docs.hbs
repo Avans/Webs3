@@ -78,6 +78,28 @@
 		</ol>
 
 	</section>
+	<section class="" id="userinfo" data-spy="userinfo" data-target="#userinfo">
+
+		<h3>/users/me/info</h3>
+
+		<p class="bg-success">GET</p>
+
+		<p>Via deze route kun je de informatie van de user ophalen:
+			<ul>
+				<li>Unique ID van de user</li>
+				<li>De naam van de user</li>
+			</ul>
+		</p>
+
+		<h4>Return value</h4>
+
+<pre>
+{
+	"_id":"rechtsonder@gmail.com",
+	"name":"Rechts onder"
+}</pre>
+
+	</section>
 	<section class="" id="megames" data-spy="megames" data-target="#megames">
 
 		<h3>/users/me/games</h3>
@@ -102,10 +124,10 @@
   	"_id":21,
 	"status":"setup",
 	"enemyId":"55268f3aa43c82a4244bb00c",
-    "enemyName":"rechtsonder@gmail.com
+	"enemyName":"rechtsonder@gmail.com"
   },
   {"
-  	_id":19,
+	_id":19,
 	"status":"started",
 	"enemyId":"55268f3aa43c82a4244bb00a",
 	"enemyName":"rechtsboven@gmail.com"
@@ -454,14 +476,10 @@
 
 		<h4>Post object</h4>
 
-		<pre>
-	{"x": "a", "y": 1 }
-</pre>
+		<pre>{"x": "a", "y": 1 }</pre>
 
 		<h4>Return value</h4>
-		<pre>
-	BOOM | SPLASH | FAIL
-</pre>
+		<pre>BOOM | SPLASH | FAIL | WINNER</pre>
 
 	</section>
 	<section class="" id="sockets" data-spy="sockets" data-target="#sockets">
@@ -484,7 +502,7 @@
 			</ol>
 		</p>
 
-		</br>
+		<br/>
 
 		<hr />
 
@@ -494,8 +512,8 @@
 			Deze file is op de volgende manier te benaderen
 		</p>
 
-		<pre>&ltscript src="https://zeeslagavans.herokuapp.com/socket.io/socket.io.js"&gt&lt/script&gt
-</pre> </br>
+		<pre>&ltscript src="https://zeeslagavans.herokuapp.com/socket.io/socket.io.js"&gt&lt/script&gt</pre>
+		<br/>
 
 		<h4>Verbinding maken met de socket</h4>
 
@@ -508,19 +526,49 @@ var options = {
 };
 
 var socket = io.connect(server, options);
-</pre></br>
+</pre>
+		<br/>
 
 		<h4>Luisteren naar berichten</h4>
 
-		<p>Indien de server ziet dat een game waar jij onderdeel van bent een update heeft, zal hij een berichtje met de naam <b>'update'</b> versturen.
-		Als parameter krijg je het ID van de game die veranderd is mee (<b>gameId</b>).
+		<h5>Update</h5>
+
+		<p>Indien de server ziet dat een game waar jij onderdeel van bent een update heeft, zal hij een berichtje versturen.
+			Als parameter krijg je het ID en de nieuwe Status in een JSON object van de game die veranderd is.
 		</p>
 
 		<pre>
-socket.on('update', function(gameId){
+socket.on('update', function(update){
+  var gameId = update.gameId // Bijvoorbeeld 10
+  var status = update.status // Bijvoorbeeld queue
+});</pre>
+		<br/>
 
-});
-</pre></br>
+		<h5>Shot</h5>
+		<p>Het is ook mogelijk om te luisteren naar schoten van spelers, zowel je eigen
+			en die van je tegenstander zullen via dit event naar jou worden gestuurd.
+			Het JSON object dat je van dit event terug krijgt heeft 4 properties namelijk: gameId, user, field & result.
+		</p>
+
+		<pre>
+socket.on('shot', function(shot){
+  var gameId = shot.gameId // Bijvoorbeeld 10
+  var user = shot.user // Bijvoorbeeld ssmulder@avans.nl
+  var field = shot.field // Dit is ook weer een JSON object die de properties x en y heeft
+  var result = shot.result // BOOM | SPLASH | FAIL | WINNER
+});</pre>
+		<br/>
+
+		<h5>Turn</h5>
+		<p>Ook is het mogelijk om te luisteren naar berichten van beurt veranderingen.
+			Dit bericht zal jouw de gameId en de email van de nieuwe speler geven.
+		</p>
+
+		<pre>
+socket.on('turn', function(turn){
+  var gameId = shot.gameId // Bijvoorbeeld 10
+  var turn = shot.turn // Bijvoorbeeld ssmulder@avans.nl
+});</pre>
 
 	</section>
 
@@ -538,6 +586,7 @@ socket.on('update', function(gameId){
    		</li>
    		<li>Routes
    			<ul class="nav nav-list">
+   				<li><a href="#userinfo">/users/me/info</a></li>
    				<li><a href="#megames">/users/me/games</a></li>
    				<li><a href="#megamesdelete">/users/me/games</a></li>
    				<li><a href="#newGame">/games</a></li>
