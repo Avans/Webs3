@@ -8,6 +8,8 @@ var Game = mongoose.model('Game');
 var token = require('../modules/tokenModule');
 var io = require('../sockets/socket')();
 
+var RandomShot = require('../modules/randomShot');
+
 
 function validateHit(hit) {
 	if(!Object.keys(hit).length) {
@@ -251,7 +253,7 @@ router.route('/games/:id/shots')
 		var valid = false;
 		var pShot;
 		while(shotFound && !valid) {
-			pShot = RandomShot();
+			pShot = RandomShot.next();
 			shotFound = _.findWhere(gameboard.shots, pShot);
 			valid = validateHit(pShot);
 		}
@@ -283,12 +285,6 @@ router.route('/games/:id/shots')
 	});
 });
 
-function RandomShot() {
-	var possible = "abcdefghij";
-	var y = Math.round(Math.random() * 9) + 1;
-	var x = possible.charAt(Math.round(Math.random() * 9 + 1));
-	return { x: x, y: y };
-}
 
 module.exports = router;
 
