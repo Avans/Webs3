@@ -273,7 +273,7 @@ router.route('/games/:id/shots')
 			}
 
 			// Send shot over socket to notify the user of the result
-			io.sendShot(game._id, game.turn, { x: pShot.x, y: pShot.y }, response);
+			io.sendShot(game._id, game.player2, { x: pShot.x, y: pShot.y }, response);
 
 			game.turn = req.user._id;
 			io.sendTurnUpdate(game._id, game.turn);
